@@ -1,16 +1,16 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) { 
+if ( ! defined( 'ABSPATH' ) ) {
     exit; // Exit if accessed directly
 }
 
 /*
 Plugin Name: WooCommerce ERIP Gateway Payments
-Plugin URI: #
-Description: Плагин для добавления шлюза оплаты ЕРИП
-Version: 1
+Plugin URI: https://github.com/begateway/woocommerce-erip-payment-module
+Description: Модуль оплаты для системы "Расчёт" (ЕРИП) через агрегатора bePaid.by
+Version: 1.0.0
 Author: Markun Vladislav
-Author Email: ihntlhi@gmail.com
+Author Email: techsupport@bepaid.by
 Text Domain: woocommerce-erip-payments
 */
 
@@ -23,7 +23,7 @@ function spyr_erip_gateway_init() {
 	// it means WooCommerce is not installed on the site
 	// so do nothing
 	if ( ! class_exists( 'WC_Payment_Gateway' ) ) return;
-	
+
 	// If we made it this far, then include our Gateway Class
 	include_once( 'erip-payments-plugin.php' );
 
@@ -34,7 +34,7 @@ function spyr_erip_gateway_init() {
 	// Lets add it too WooCommerce
 	add_filter( 'woocommerce_payment_gateways', 'spyr_add_erip_gateway_gateway' );
 	add_filter( 'woocommerce_order_actions', 'wdm_add_order_meta_box_actions' );
-		
+
 	register_post_status( 'wc-shipped', array(
          'label' => "Сгенерировать платежное получение в системе ЕРИП",
          'public' => true,
@@ -45,11 +45,11 @@ function spyr_erip_gateway_init() {
         ));
 
 	/* Add Order action to Order action meta box */
-	    
+
 	function wdm_add_order_meta_box_actions($actions)
 	{
 	   $actions['wdm_shipped'] = "Сгенерировать платежное получение в системе ЕРИП";
-	   return $actions; 
+	   return $actions;
 	}
 
 	function spyr_add_erip_gateway_gateway( $methods ) {
@@ -66,7 +66,7 @@ function spyr_erip_gateway_action_links( $links ) {
 	);
 
 	// Merge our new link with the default ones
-	return array_merge( $plugin_links, $links );	
+	return array_merge( $plugin_links, $links );
 }
 
 //Инициализация плагина и загрузка языкового пакета для плагина
@@ -96,7 +96,7 @@ add_filter( 'woocommerce_payment_gateways', 'woocommerce_mygateway_add_gateway')
 //Add callback if Shipped action called
 add_filter( 'woocommerce_order_action_wdm_shipped', 'wdm_order_shipped_callback', 10, 1);
 function wdm_order_shipped_callback($order)
-{ 
+{
     $plugin = new SPYR_ERIP_GATEWAY;
     $order->update_status('Pending payment', __( 'Ожидание оплаты', 'woocommerce-erip-payments' ));
     return $plugin->create_invoice_with_erip($order);

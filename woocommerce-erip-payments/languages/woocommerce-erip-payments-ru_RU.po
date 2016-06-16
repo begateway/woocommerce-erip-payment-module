@@ -1,39 +1,178 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Woocommerce Erip Payments - WooCommerce Gateway Payments\n"
+"Project-Id-Version: Woocommerce Erip Payments - WooCommerce Gateway "
+"Payments\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: Tue Apr 12 2016 16:57:59 GMT+0200 (Восточная Европа "
-"(зима))\n"
-"PO-Revision-Date: Sun Apr 24 2016 16:24:26 GMT+0200 (Восточная Европа "
-"(зима))\n"
+"POT-Creation-Date: 2016-06-16 08:54+0300\n"
+"PO-Revision-Date: 2016-06-16 09:00+0300\n"
 "Last-Translator: NTL <sdfsdf@dfsfd.sdfsfd>\n"
 "Language-Team: \n"
-"Language: Russian\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10 >= 2 && "
-"n%10<=4 &&(n%100<10||n%100 >= 20)? 1 : 2)\n"
+"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10 >= 2 && n"
+"%10<=4 &&(n%100<10||n%100 >= 20)? 1 : 2);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: .\n"
-"X-Poedit-SearchPath-0: ..\n"
 "X-Poedit-KeywordsList: _:1;gettext:1;dgettext:2;ngettext:1,2;dngettext:2,3;"
 "__:1;_e:1;_c:1;_n:1,2;_n_noop:1,2;_nc:1,2;__ngettext:1,2;__ngettext_noop:1,2;"
 "_x:1,2c;_ex:1,2c;_nx:1,2,4c;_nx_noop:1,2,3c;_n_js:1,2;_nx_js:1,2,3c;"
 "esc_attr__:1;esc_html__:1;esc_attr_e:1;esc_html_e:1;esc_attr_x:1,2c;"
 "esc_html_x:1,2c;comments_number_link:2,3;t:1;st:1;trans:1;transChoice:1,2\n"
 "X-Loco-Target-Locale: ru_RU\n"
-"X-Generator: Loco - https://localise.biz/"
+"X-Generator: Poedit 1.8.8\n"
+"X-Poedit-SearchPath-0: ..\n"
+
+#: ../erip-payments-plugin.php:74
+msgid "plugin_method_title"
+msgstr "ЕРИП"
+
+#: ../erip-payments-plugin.php:77
+msgid "plugin_method_description"
+msgstr ""
+"Плагин для приёма платежей через систему \"Расчёт\" (ЕРИП), используя "
+"взаимодействие с арегатором bePaid."
+
+#: ../erip-payments-plugin.php:140
+msgid "enable_disable_payments_gateway"
+msgstr "Оплата через ЕРИП"
+
+#: ../erip-payments-plugin.php:141
+msgid "enable_disable_payments_gateway_label"
+msgstr "Разрешить"
+
+#: ../erip-payments-plugin.php:147
+msgid "erip_id_magazin_title"
+msgstr "ID магазина"
+
+#: ../erip-payments-plugin.php:149
+msgid "erip_id_magazin_desk"
+msgstr "Введите ID магазина в системе bePaid"
+
+#: ../erip-payments-plugin.php:154
+msgid "erip_API_key_title"
+msgstr "Ключ магазина"
+
+#: ../erip-payments-plugin.php:156
+msgid "erip_API_key_desk"
+msgstr "Введите ключ магазина в системе bePaid"
+
+#: ../erip-payments-plugin.php:161
+msgid "erip_API_domain_title"
+msgstr "Домен API"
+
+#: ../erip-payments-plugin.php:163
+msgid "erip_API_domain_desk"
+msgstr "Введите домен для доступа к API системы bePaid"
+
+#: ../erip-payments-plugin.php:168
+msgid "erip_kod_uslugi_title"
+msgstr "Код услуги в системе ЕРИП"
+
+#: ../erip-payments-plugin.php:170
+msgid "erip_kod_uslugi_desk"
+msgstr "Введите код услуги в системе ЕРИП, присвоенный bePaid"
+
+#: ../erip-payments-plugin.php:175
+msgid "erip_name_provider_uslugi_title"
+msgstr "Название поставщика услуг"
+
+#: ../erip-payments-plugin.php:177
+msgid "erip_name_provider_uslugi_desk"
+msgstr "Введите Ваше название поставщика услуг в системе ЕРИП"
+
+#: ../erip-payments-plugin.php:182
+msgid "info_message_in_check_title"
+msgstr "Сообщение в чеке после оплаты"
+
+#: ../erip-payments-plugin.php:184
+msgid "info_message_in_check_desk"
+msgstr "Введите сообщение, которой будет выводиться в чеке после оплаты заказа"
+
+#: ../erip-payments-plugin.php:185
+msgid "info_message_in_check_default"
+msgstr "Спасибо за оплату"
+
+#: ../erip-payments-plugin.php:189
+msgid "name_sposoba_oplati_title"
+msgstr "Название способа оплаты"
+
+#: ../erip-payments-plugin.php:191
+msgid "name_sposoba_oplati_desk"
+msgstr ""
+"Введите название способа оплаты, который будет отображаться у пользователя в "
+"списке вариантов оплаты"
+
+#: ../erip-payments-plugin.php:192
+msgid "name_sposoba_oplati_default"
+msgstr "Оплата через АИС \"Расчет\" (ЕРИП)"
+
+#: ../erip-payments-plugin.php:196
+msgid "description_sposoba_oplati_title"
+msgstr "Описание способа оплаты для покупателя"
+
+#: ../erip-payments-plugin.php:198
+msgid "description_sposoba_oplati_desk"
+msgstr "Введите описание способа оплаты для пользователя"
+
+#: ../erip-payments-plugin.php:199
+msgid "description_sposoba_oplati_default"
+msgstr ""
+"Система \"Расчет\" (ЕРИП) позволяет произвести оплату в любом удобном для "
+"Вас месте, в удобное для Вас время, в удобном для Вас пункте банковского    "
+"обслуживания – банкомате, инфокиоске, интернет-банке, кассе банков, с "
+"помощью мобильного банкинга и т.д.\n"
+"\n"
+"   Вы можете осуществить платеж с использованием наличных денежных средств, "
+"электронных денег и банковских платежных карточек в пунктах банковского "
+"обслуживания банков, которые оказывают услуги по приему платежей, а также "
+"посредством инструментов дистанционного банковского обслуживания."
+
+#: ../erip-payments-plugin.php:204
+msgid "description_confiration_manual_mode_title"
+msgstr "Текст-подтверждение заказа для ручного режима"
+
+#: ../erip-payments-plugin.php:206
+msgid "description_confiration_manual_mode_desk"
+msgstr "Введите текст-подтверждение заказа для ручного режима"
+
+#: ../erip-payments-plugin.php:207
+msgid "description_confiration_manual_mode_default"
+msgstr ""
+"Спасибо за Ваш заказ. Наш менеджер свяжется с Вами для уточнения заказа и "
+"сообщит номер заказа и инструкции как его оплатить в системе ЕРИП."
+
+#: ../erip-payments-plugin.php:212
+msgid "description_confiration_auto_mode_title"
+msgstr "Текст-подтверждение заказа для автоматического режима"
 
 #: ../erip-payments-plugin.php:214
+msgid "description_confiration_auto_mode_desk"
+msgstr "Введите текст-подтверждение заказа для автоматического режима"
+
+#: ../erip-payments-plugin.php:215
+msgid "description_confiration_auto_mode_default"
+msgstr ""
+"Спасибо за заказ.\n"
+"Для проведения платежа через ЕРИП необходимо: \n"
+"\n"
+"1.​ Выбрать пункт Система \"Расчет” (ЕРИП)\n"
+"2.​ Выбрать последовательно вкладки: {{instruction_value_from_response}}\n"
+"3.​  Ввести номер заказа {{order_number}}\n"
+"4.​ Проверить корректность информации\n"
+"5.​ Совершить платеж."
+
+#: ../erip-payments-plugin.php:220
 msgid "description_erip_order_pay_title"
-msgstr "Текст для E-mail сообщения с инструкцией об оплате"
+msgstr "Текст для e-mail сообщения с инструкцией об оплате"
 
-#: ../erip-payments-plugin.php:216
+#: ../erip-payments-plugin.php:222
 msgid "description_erip_order_pay_desk"
-msgstr "Введите текст сообщения, которое Ваш покупатель получит после создания заказа"
+msgstr ""
+"Введите текст сообщения, которое Ваш покупатель получит после создания заказа"
 
-#: ../erip-payments-plugin.php:217
+#: ../erip-payments-plugin.php:223
 msgid "description_erip_order_pay_default"
 msgstr ""
 "Здравствуйте, {{fio}}!\n"
@@ -61,206 +200,38 @@ msgstr ""
 "\n"
 "5.​ Совершить платеж."
 
-#: ../erip-payments-plugin.php:310
-msgid "Your order is being shipped.."
-msgstr ""
+#: ../erip-payments-plugin.php:228
+msgid "type_invoice_create_title"
+msgstr "Создание счета в ЕРИП"
 
-#: ../erip-payments-plugin.php:313
-#, php-format
-msgid "Order %s ready for shipping"
-msgstr ""
+#: ../erip-payments-plugin.php:229
+msgid "type_invoice_create_desk"
+msgstr "Выберите тип создания счета для пользователя"
 
-#: ../erip-payments-plugin.php:315
-#, php-format
-msgid "Order %s received"
-msgstr ""
+#: ../erip-payments-plugin.php:235
+msgid "manual_type_create_invoice_title"
+msgstr "Ручное создание счета"
 
-#: ../erip-payments-plugin.php:344 ../woocommerce-erip-payments.php:96
-msgid "Awaiting cheque payment"
-msgstr ""
+#: ../erip-payments-plugin.php:236
+msgid "auto_type_create_invoice_title"
+msgstr "Автоматическое создание счета"
 
-#. Name of the plugin
-msgid "WooCommerce ERIP Gateway Payments"
-msgstr ""
+#: ../erip-payments-plugin.php:356
+msgid "manual_mode_order_processing_title"
+msgstr "Заказ требует уточнения остатков и обратного звонка клиенту."
 
-#. URI of the plugin
-msgid "#"
-msgstr ""
-
-#. Description of the plugin
-msgid "Плагин для добавления шлюза оплаты ЕРИП"
-msgstr ""
-
-#. Author of the plugin
-msgid "Markun Vladislav"
-msgstr ""
-
-#: ../woocommerce-erip-payments.php:39
+#: ../woocommerce-erip-payments.php:44
 #, php-format
 msgid "Shipped <span class=\"count\">(%s)</span>"
 msgid_plural "Shipped <span class=\"count\">(%s)</span>"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
-#: ../erip-payments-plugin.php:70
-msgid "plugin_method_title"
-msgstr "ЕРИП"
-
-#: ../erip-payments-plugin.php:73
-msgid "plugin_method_description"
-msgstr ""
-"Плагин для оплаты продукции Вашего интернет-магазина в автоматизированной "
-"информационной системе единого расчетного и информационного пространства, в "
-"простонародии ЕРИП."
-
-#: ../erip-payments-plugin.php:134
-msgid "enable_disable_payments_gateway"
-msgstr "Оплата через ЕРИП"
-
-#: ../erip-payments-plugin.php:135
-msgid "enable_disable_payments_gateway_label"
-msgstr "Разрешить"
-
-#: ../erip-payments-plugin.php:141
-msgid "erip_id_magazin_title"
-msgstr "ID магазина в системе ЕРИП"
-
-#: ../erip-payments-plugin.php:143
-msgid "erip_id_magazin_desk"
-msgstr "Введите ID магазина в системе ЕРИП"
-
-#: ../erip-payments-plugin.php:148
-msgid "erip_API_key_title"
-msgstr "API ключ ЕРИП"
-
-#: ../erip-payments-plugin.php:150
-msgid "erip_API_key_desk"
-msgstr "Введите API ключ для доступа к системе ЕРИП"
-
-#: ../erip-payments-plugin.php:155
-msgid "erip_API_domain_title"
-msgstr "Домен API системы ЕРИП"
-
-#: ../erip-payments-plugin.php:157
-msgid "erip_API_domain_desk"
-msgstr "Введите домен для доступа к API системы ЕРИП"
-
-#: ../erip-payments-plugin.php:162
-msgid "erip_kod_uslugi_title"
-msgstr "Код услуги в системе ЕРИП"
-
-#: ../erip-payments-plugin.php:164
-msgid "erip_kod_uslugi_desk"
-msgstr "Ввведите код услуги в системе ЕРИП"
-
-#: ../erip-payments-plugin.php:169
-msgid "erip_name_provider_uslugi_title"
-msgstr "Название поставщика услуг"
-
-#: ../erip-payments-plugin.php:171
-msgid "erip_name_provider_uslugi_desk"
-msgstr "Введите название поставщика услуг в системе ЕРИП"
-
-#: ../erip-payments-plugin.php:176
-msgid "info_message_in_check_title"
-msgstr "Сообщение в чеке после оплаты"
-
-#: ../erip-payments-plugin.php:178
-msgid "info_message_in_check_desk"
-msgstr "Введите сообщение, которой будет выводиться в чеке после оплаты заказа"
-
-#: ../erip-payments-plugin.php:179
-msgid "info_message_in_check_default"
-msgstr "Спасибо за оплату"
-
-#: ../erip-payments-plugin.php:183
-msgid "name_sposoba_oplati_title"
-msgstr "Название способа оплаты"
-
-#: ../erip-payments-plugin.php:185
-msgid "name_sposoba_oplati_desk"
-msgstr ""
-"Введите название способа оплаты, который будет отображаться у пользователя в "
-"списке вариантов оплаты"
-
-#: ../erip-payments-plugin.php:186
-msgid "name_sposoba_oplati_default"
-msgstr "Оплата через АИС \"Расчет\" (ЕРИП)"
-
-#: ../erip-payments-plugin.php:190
-msgid "description_sposoba_oplati_title"
-msgstr "Описание способа оплаты для покупателя"
-
-#: ../erip-payments-plugin.php:192
-msgid "description_sposoba_oplati_desk"
-msgstr "Введите описание способа оплаты для пользователя"
-
-#: ../erip-payments-plugin.php:193
-msgid "description_sposoba_oplati_default"
-msgstr ""
-"Система \"Расчет\" (ЕРИП) позволяет произвести оплату в любом удобном для Вас "
-"месте, в удобное для Вас время, в удобном для Вас пункте банковского    "
-"обслуживания – банкомате, инфокиоске, интернет-банке, кассе банков, с "
-"помощью мобильного банкинга и т.д.\n"
-"\n"
-"   Вы можете осуществить платеж с использованием наличных денежных средств, "
-"электронных денег и банковских платежных карточек в пунктах банковского "
-"обслуживания банков, которые оказывают услуги по приему платежей, а также "
-"посредством инструментов дистанционного банковского обслуживания."
-
-#: ../erip-payments-plugin.php:198
-msgid "description_confiration_manual_mode_title"
-msgstr "Текст-подтверждение заказа для ручного режима"
-
-#: ../erip-payments-plugin.php:200
-msgid "description_confiration_manual_mode_desk"
-msgstr "Введите текст-подтверждение заказа для ручного режима"
-
-#: ../erip-payments-plugin.php:201
-msgid "description_confiration_manual_mode_default"
-msgstr ""
-"Спасибо за Ваш заказ. Наш менеджер свяжется с Вами для уточнения заказа и "
-"сообщит номер заказа и инструкции как его оплатить в системе ЕРИП."
-
-#: ../erip-payments-plugin.php:206
-msgid "description_confiration_auto_mode_title"
-msgstr "Текст-подтверждение заказа для автоматического режима"
-
-#: ../erip-payments-plugin.php:208
-msgid "description_confiration_auto_mode_desk"
-msgstr "Введите текст-подтверждение заказа для автоматического режима"
-
-#: ../erip-payments-plugin.php:209
-msgid "description_confiration_auto_mode_default"
-msgstr ""
-"Спасибо за заказ.\n"
-"Для проведения платежа через ЕРИП необходимо: \n"
-"1.​ Выбрать пункт Система \"Расчет” (ЕРИП)\n"
-"2.​ Выбрать последовательно вкладки: {{instruction_value_from_response}}\n"
-"3.​  Ввести номер заказа {{order_number}}\n"
-"4.​ Проверить корректность информации\n"
-"5.​ Совершить платеж."
-
-#: ../erip-payments-plugin.php:222
-msgid "type_invoice_create_title"
-msgstr "Создание счета в ЕРИП"
-
-#: ../erip-payments-plugin.php:223
-msgid "type_invoice_create_desk"
-msgstr "Выберите тип создания счета для пользователя"
-
-#: ../erip-payments-plugin.php:229
-msgid "manual_type_create_invoice_title"
-msgstr "Ручное создание счета"
-
-#: ../erip-payments-plugin.php:230
-msgid "auto_type_create_invoice_title"
-msgstr "Автоматическое создание счета"
-
-#: ../erip-payments-plugin.php:327
-msgid "manual_mode_order_processing_title"
-msgstr "Заказ требует уточнения остатков и обратного звонка клиенту."
-
-#: ../woocommerce-erip-payments.php:60
+#: ../woocommerce-erip-payments.php:65
 msgid "settings"
 msgstr "Настройки"
+
+#: ../woocommerce-erip-payments.php:101
+msgid "Ожидание оплаты"
+msgstr ""
