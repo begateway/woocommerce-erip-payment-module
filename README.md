@@ -10,27 +10,27 @@
   - Выберите архив модуля _woocommerce-erip-payments.zip_ и установите
   - Выберите __Плагины -> Установленные__ и найдите _WooCommerce ERIP Gateway Payments_ модуль и активируйте его.
 
-![Добавить новый плагин](https://github.com/beGateway/woocommerce-erip-payment-module/raw/master/doc/01_7.png)
+![Добавить новый плагин](https://github.com/beGateway/woocommerce-erip-payment-module/raw/master/doc/01_7.jpg)
 
-![Загрузить новый плагин](https://github.com/beGateway/woocommerce-erip-payment-module/raw/master/doc/01_6.png)
+![Загрузить новый плагин](https://github.com/beGateway/woocommerce-erip-payment-module/raw/master/doc/01_6.jpg)
 
-![Установить новый плагин](https://github.com/beGateway/woocommerce-erip-payment-module/raw/master/doc/01_5.png)
+![Установить новый плагин](https://github.com/beGateway/woocommerce-erip-payment-module/raw/master/doc/01_5.jpg)
 
-![Активировать новый плагин](https://github.com/beGateway/woocommerce-erip-payment-module/raw/master/doc/01_4.png)
+![Активировать новый плагин](https://github.com/beGateway/woocommerce-erip-payment-module/raw/master/doc/01_4.jpg)
 
 ## Настройка
 
 Зайдите в **WooCommerce -> Настройки -> Платежи**
 
-![Настройки плагина](https://github.com/beGateway/woocommerce-erip-payment-module/raw/master/doc/01_3.png)
+![Настройки плагина](https://github.com/beGateway/woocommerce-erip-payment-module/raw/master/doc/01_3.jpg)
 
 Вверху страницы вы увидите ссылку __ЕРИП__. Нажмите на её, чтобы перейти к настройкам ЕРИП модуля.
 
-![Перейти к настройкам ЕРИП плагина](https://github.com/beGateway/woocommerce-erip-payment-module/raw/master/doc/01_2.png)
+![Перейти к настройкам ЕРИП плагина](https://github.com/beGateway/woocommerce-erip-payment-module/raw/master/doc/01_2.jpg)
 
 Задайте настройки, которые вы получили от bePaid или используйте тестовые данные, которые вы можете найти ниже.
 
-![Настройки ЕРИП плагина](https://github.com/beGateway/woocommerce-erip-payment-module/raw/master/doc/01_1.png)
+![Настройки ЕРИП плагина](https://github.com/beGateway/woocommerce-erip-payment-module/raw/master/doc/01_1.jpg)
 
 
   - Разрешите оплату через ЕРИП, поставив галочку **Разрешить**
@@ -58,6 +58,6 @@ WooCommerce 2.3.x / 2.4.x / 2.5.x / 2.6.x
   - Код услуги в системе ЕРИП **99999999**
 
 Если у вас нет еще зарегистрированного магазина в системе bePaid, то вы можете использовать следующие данные:
-  
+
   - ID магазина **363**
   - Ключ магазина **b8647b68898b084b836474ed8d61ffe117c9a01168d867f24953b776ddcb134d**
