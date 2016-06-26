@@ -4,7 +4,7 @@
 	*/
 	class API
 	{
-		
+
 		protected $headers = array();
 
 		protected $domainAPI = 'https://api.bepaid.by';
@@ -15,7 +15,7 @@
 
 		function __construct()
 		{
-			
+
 		}
 
 		public function setDomainAPI($domainAPI = '')
@@ -49,15 +49,11 @@
 		*/
 		public function getInfoPaymentsWithOrderID($idOrder)
 		{
-			$headers = array(
-	            "Content-Type: application/json",
-	            "Content-Length: " . strlen(json_encode($arrayDataInvoice)) 
-	        );
 			$ch = curl_init($this->domainAPI.'/beyag/payments/?order_id='.$idOrder);
 			curl_setopt($ch, CURLOPT_PORT, 443);
-		    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-	    	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-		    curl_setopt($ch, CURLOPT_USERPWD, $this->getIdShop().':'.$this->getApiKeyShop() );
+	    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 1);
+    	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+	    curl_setopt($ch, CURLOPT_USERPWD, $this->getIdShop().':'.$this->getApiKeyShop() );
 			$response = curl_exec($ch);
 
 			if (!$response) {
