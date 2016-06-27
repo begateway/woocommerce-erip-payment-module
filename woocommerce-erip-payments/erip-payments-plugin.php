@@ -475,7 +475,7 @@ class Money {
 /*
 	Класс для обработки callback от ЕРИП
 */
-class WC_ERIP {
+class WC_ERIP extends SPYR_ERIP_GATEWAY {
 	public function __construct() {
     	add_action('woocommerce_api_'.strtolower(get_class($this)), array(&$this, 'handle_callback'));
   	}

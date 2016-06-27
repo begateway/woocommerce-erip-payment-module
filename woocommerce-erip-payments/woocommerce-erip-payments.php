@@ -36,7 +36,7 @@ function spyr_erip_gateway_init() {
 	add_filter( 'woocommerce_order_actions', 'wdm_add_order_meta_box_actions' );
 
 	register_post_status( 'wc-shipped', array(
-         'label' => "Сгенерировать платежное получение в системе ЕРИП",
+         'label' => "Сгенерировать платежное поручение в системе ЕРИП",
          'public' => true,
          'exclude_from_search' => false,
          'show_in_admin_all_list' => true,
@@ -48,7 +48,7 @@ function spyr_erip_gateway_init() {
 
 	function wdm_add_order_meta_box_actions($actions)
 	{
-	   $actions['wdm_shipped'] = "Сгенерировать платежное получение в системе ЕРИП";
+	   $actions['wdm_shipped'] = "Сгенерировать платежное поручение в системе ЕРИП";
 	   return $actions;
 	}
 
