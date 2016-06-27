@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 Plugin Name: WooCommerce ERIP Gateway Payments
 Plugin URI: https://github.com/begateway/woocommerce-erip-payment-module
 Description: Модуль оплаты для системы "Расчёт" (ЕРИП) через агрегатора bePaid.by
-Version: 1.0.0
+Version: 1.0.1
 Author: Markun Vladislav
 Author Email: techsupport@bepaid.by
 Text Domain: woocommerce-erip-payments
@@ -86,18 +86,18 @@ add_filter('woocommerce_thankyou_order_received_text', 'isa_order_received_text'
 /**
  * Обработчки Call Back
  */
-function woocommerce_mygateway_add_gateway( $methods ) {
-  $methods[] = 'WC_mygateway';
+function woocommerce_erip_add_gateway( $methods ) {
+  $methods[] = 'WC_ERIP';
   return $methods;
 }
-add_filter( 'woocommerce_payment_gateways', 'woocommerce_mygateway_add_gateway');
+add_filter( 'woocommerce_payment_gateways', 'woocommerce_erip_add_gateway');
 
 
 //Add callback if Shipped action called
 add_filter( 'woocommerce_order_action_wdm_shipped', 'wdm_order_shipped_callback', 10, 1);
 function wdm_order_shipped_callback($order)
 {
-    $plugin = new SPYR_ERIP_GATEWAY;
-    $order->update_status('Pending payment', __( 'Ожидание оплаты', 'woocommerce-erip-payments' ));
-    return $plugin->create_invoice_with_erip($order);
+  $plugin = new SPYR_ERIP_GATEWAY;
+  $order->update_status('pending', __( 'Ожидание оплаты', 'woocommerce-erip-payments' ));
+  return $plugin->create_invoice_with_erip($order);
 }
