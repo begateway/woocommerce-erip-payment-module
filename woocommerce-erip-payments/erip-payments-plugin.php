@@ -60,6 +60,9 @@ class SPYR_ERIP_GATEWAY extends WC_Payment_Gateway {
 	} // End __construct()
 
 	static function thankyou_order_received_text_generate($order) {
+    if ($order->payment_method != 'SPYR_ERIP_GATEWAY')
+      return;
+
 		//Проверяем режим работы обработки заказов плагина
 		if (self::$optionsPlugin['type_sposoba_oplati'] == 'manual') {
 			//В случае ручной обработки заказов, выдаём сообщение
