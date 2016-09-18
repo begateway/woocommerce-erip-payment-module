@@ -83,16 +83,6 @@ function isa_order_received_text( $text, $order ) {
 }
 add_filter('woocommerce_thankyou_order_received_text', 'isa_order_received_text', 10, 2 );
 
-/**
- * Обработчки Call Back
- */
-function woocommerce_erip_add_gateway( $methods ) {
-  $methods[] = 'WC_ERIP';
-  return $methods;
-}
-add_filter( 'woocommerce_payment_gateways', 'woocommerce_erip_add_gateway');
-
-
 //Add callback if Shipped action called
 add_filter( 'woocommerce_order_action_wdm_shipped', 'wdm_order_shipped_callback', 10, 1);
 function wdm_order_shipped_callback($order)
