@@ -60,7 +60,7 @@ class SPYR_ERIP_GATEWAY extends WC_Payment_Gateway {
 	} // End __construct()
 
 	static function thankyou_order_received_text_generate($order) {
-    if ($order->payment_method != 'SPYR_ERIP_GATEWAY')
+    if ($order->get_payment_method() != 'SPYR_ERIP_GATEWAY')
       return;
 
 		//Проверяем режим работы обработки заказов плагина
@@ -75,7 +75,7 @@ class SPYR_ERIP_GATEWAY extends WC_Payment_Gateway {
 			$api->setIdShop( self::$optionsPlugin['erip_id_magazin'] );
 			$api->setApiKeyShop( self::$optionsPlugin['erip_API_key'] );
 			//Получаем информацию о проведенном платеже в системе ЕРИП
-			$dataPaymentsEripSystem = $api->getInfoPaymentsWithOrderID($order->post->ID);
+			$dataPaymentsEripSystem = $api->getInfoPaymentsWithOrderID($order->get_id());
 
 			//Замена плейсхолдеров на данные из отвера платёжной системы
 			$instructionEripPays = isset($dataPaymentsEripSystem->transaction->erip->instruction[0]) ?
@@ -293,8 +293,8 @@ class SPYR_ERIP_GATEWAY extends WC_Payment_Gateway {
 		global $woocommerce;
 		if (!$order) return FALSE;
 
-    $to_email = $order->billing_email;
-    $headers = 'From: '. $order->billing_email . "\r\n";
+    $to_email = $order->get_billing_email();
+    $headers = 'From: '. $order->get_billing_email() . "\r\n";
     // Create a mailer
   	$mailer = $woocommerce->mailer();
 
@@ -307,7 +307,7 @@ class SPYR_ERIP_GATEWAY extends WC_Payment_Gateway {
 
 		$message_body = str_replace("{{instruction_erip}}", $instructionEripPays, $message_body);
 		$message_body = str_replace("{{order_num}}", $dataPaymentsEripSystem->transaction->order_id, $message_body);
-		$message_body = str_replace("{{fio}}", $order->shipping_first_name." ".$order->shipping_last_name, $message_body);
+		$message_body = str_replace("{{fio}}", $order->get_shipping_first_name() ." ". $order->get_shipping_last_name(), $message_body);
 		$message_body = str_replace("{{name_shop}}", get_option( 'blogname' ), $message_body);
 		$message_body = str_replace("{{name_provider_service}}", $this->get_option('erip_name_provider_uslugi'), $message_body);
 
@@ -316,7 +316,7 @@ class SPYR_ERIP_GATEWAY extends WC_Payment_Gateway {
     // Message head and message body.
     sprintf('Инструкция об оплате заказа № %s', $order->get_order_number() ), $message_body );
   	// Client email, email subject and message.
-		$result = $mailer->send( $order->billing_email, sprintf( 'Инструкция об оплате заказа № %s', $order->get_order_number() ), $message );
+		$result = $mailer->send( $order->get_billing_email(), sprintf( 'Инструкция об оплате заказа № %s', $order->get_order_number() ), $message );
 	}
 
 	// Submit payment and handle response
@@ -494,7 +494,7 @@ class WC_ERIP extends SPYR_ERIP_GATEWAY {
     global $woocommerce;
 		$order = wc_get_order($order_id);
 
-    if (!$order || $order->order_key !== $order_key) {
+    if (!$order || $order->get_order_key() !== $order_key) {
       die('ERROR');
     }
 
