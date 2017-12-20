@@ -1,5 +1,7 @@
 # Модуль оплаты для системы "Расчёт" (ЕРИП) через агрегатора bePaid.by
 
+[Версия для WooCommerce 2.x](https://github.com/begateway/woocommerce-erip-payment-module/tree/woocommerce-2)
+
 ## Установка
 
   - Создайте резервную копию вашего магазина и базы данных
