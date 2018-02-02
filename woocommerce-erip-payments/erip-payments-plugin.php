@@ -215,7 +215,7 @@ class SPYR_ERIP_GATEWAY extends WC_Payment_Gateway {
 				"description" => "Оплата заказа #".$order_sybmol_link->get_order_number(),
 				"email" => $order_sybmol_link->billing_email,
 				"ip" => Tools::getIp(),
-				"order_id" => $order_sybmol_link->get_order_number(),
+				"order_id" => $order_sybmol_link->get_id(),
 				"notification_url" => $notification_url,
         "tracking_id" => $order_sybmol_link->order_key,
 				"customer" => [
