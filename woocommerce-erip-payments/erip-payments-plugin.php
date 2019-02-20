@@ -1,5 +1,4 @@
 <?php
-
 if ( ! defined( 'ABSPATH' ) ) {
     exit; // Exit if accessed directly
 }
@@ -181,6 +180,13 @@ class SPYR_ERIP_GATEWAY extends WC_Payment_Gateway {
 				'default'	=> __( 'description_erip_order_pay_default', 'woocommerce-erip-payments' ),
 				'css'		=> 'max-width:80%;'
 			),
+      // сколько минут дать на оплату
+      'payment_valid' => array(
+        'title' => __( 'Payment valid (minutes)', 'woocommerce-erip-payments' ),
+        'type' => 'text',
+        'description' => __( 'The value sets a period of time within which an order must be paid', 'woocommerce-erip-payments' ),
+        'default' => '60'
+      ),
 			//Создание счета в ЕРИП
 			'type_sposoba_oplati' => array(
 				'title'		=> __( 'type_invoice_create_title', 'woocommerce-erip-payments' ),
@@ -216,6 +222,7 @@ class SPYR_ERIP_GATEWAY extends WC_Payment_Gateway {
 				"email" => $order_sybmol_link->billing_email,
 				"ip" => Tools::getIp(),
 				"order_id" => $order_sybmol_link->get_id(),
+        "expired_at" => date("c", (int)$this->get_option('payment_valid') * 60 + time() + 1),
 				"notification_url" => $notification_url,
         "tracking_id" => $order_sybmol_link->order_key,
 				"customer" => [
@@ -229,7 +236,7 @@ class SPYR_ERIP_GATEWAY extends WC_Payment_Gateway {
 	 			],
 	 			"payment_method" => [
 					"type" => "erip",
-					"account_number" => $order_sybmol_link->get_order_number(),
+					"account_number" => $order_sybmol_link->get_id(),
 					"service_no" => $this->get_option( 'erip_kod_uslugi' ),
 					"service_info" => [
 						"Оплата заказа ".$order_sybmol_link->get_order_number()
@@ -261,7 +268,7 @@ class SPYR_ERIP_GATEWAY extends WC_Payment_Gateway {
 		$response = curl_exec($ch);
 
     if ($response === false) {
-			wc_add_notice( curl_errno($ch) . ': ' . curl_error($ch), 'error' );
+			$this->_add_notice( curl_errno($ch) . ': ' . curl_error($ch), 'error' );
       curl_close($ch);
       return false;
     }
@@ -269,12 +276,12 @@ class SPYR_ERIP_GATEWAY extends WC_Payment_Gateway {
     $response = json_decode($response);
 
     if (is_null($response) || $response === false) {
-			wc_add_notice( 'Ошибка обработки JSON-ответа', 'error' );
+			$this->_add_notice( 'Ошибка обработки JSON-ответа', 'error' );
       return false;
     }
 
     if ($response->transaction->status != 'pending') {
-      wc_add_notice( 'Ошибка регистрации счета в ЕРИП', 'error' );
+      $this->_add_notice( 'Ошибка регистрации счета в ЕРИП', 'error' );
       return false;
     }
 
@@ -284,6 +291,20 @@ class SPYR_ERIP_GATEWAY extends WC_Payment_Gateway {
 
 		return true;
 	}
+
+  private function _add_notice($message) {
+    if (is_admin()) {
+      ob_start();
+      echo "
+      <div class=\"notice notice-error\">
+        <p>{$message}</p>
+      </div>
+      ";
+      echo ob_get_clean();
+    } else {
+      wc_add_notice($message);
+    }
+  }
 
 	/*
 		Отправка сообщения с инструкцией об оплате

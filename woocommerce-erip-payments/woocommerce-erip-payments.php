@@ -8,8 +8,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 Plugin Name: WooCommerce ERIP Gateway Payments
 Plugin URI: https://github.com/begateway/woocommerce-erip-payment-module
 Description: Модуль оплаты для системы "Расчёт" (ЕРИП) через агрегатора bePaid.by
-Version: 3.0.2
-Author: Markun Vladislav
+Version: 3.1.1
+Author: eComCharge
 Author Email: techsupport@bepaid.by
 Text Domain: woocommerce-erip-payments
 */
