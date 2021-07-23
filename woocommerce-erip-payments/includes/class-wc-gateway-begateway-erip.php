@@ -331,7 +331,6 @@ class WC_Gateway_Begateway_Erip extends WC_Payment_Gateway {
 		$message_body = str_replace( "{{order_number}}", $dataPaymentsEripSystem->transaction->order_id, $message_body );
 		$message_body = str_replace( "{{fio}}", $order->get_billing_first_name() ." ". $order->get_billing_last_name(), $message_body );
 		$message_body = str_replace( "{{name_shop}}", get_option( 'blogname' ), $message_body);
-		$message_body = str_replace( "{{name_sevice_provider}}", $this->get_option('erip_name_provider_uslugi'), $message_body );
 
   	//$message = $mailer->wrap_message($message_body);
   	$message 		= $mailer->wrap_message(
@@ -437,26 +436,25 @@ class WC_Gateway_Begateway_Erip extends WC_Payment_Gateway {
    * @return string updated instruction
 	 */
   protected function _update_instruction( $message, $order ) {
-    $placeholders = array(
-      '{{fio}}', '{{order_number}}',
-      '{{name_shop}}', '{{name_sevice_provider}}',
-      '{{instruction_erip}}'
-    );
-
     $instruction = $message;
 
     if ( $this->_response_erip ) {
       $erip_steps = isset( $this->_response_erip->transaction->erip->instruction[0] ) ?
         $this->_response_erip->transaction->erip->instruction[0] :
         $this->_response_erip->transaction->erip->instruction;
+      $qr_code = $this->_response_erip->transaction->erip->qr_code;
+      $qr_code = '<img src="' . $qr_code . '">';
 
-        $instruction = str_replace( "{{instruction_erip}}", $erip_steps, $instruction );
+      $erip_sevice_code = $this->_response_erip->transaction->erip->service_no_erip;
+
+      $instruction = str_replace( "{{instruction_erip}}", $erip_steps, $instruction );
+      $instruction = str_replace( "{{qr_code}}", $qr_code, $instruction );
+      $instruction = str_replace( "{{erip_service_code}}", $erip_sevice_code, $instruction );
     }
 
     $instruction = str_replace( "{{order_number}}", $order->get_id(), $instruction );
     $instruction = str_replace( "{{fio}}", $order->get_billing_first_name() ." ". $order->get_billing_last_name(), $instruction );
     $instruction = str_replace( "{{name_shop}}", get_option( 'bname' ), $instruction);
-    $instruction = str_replace( "{{name_sevice_provider}}", $this->get_option('erip_name_provider_uslugi'), $instruction );
 
     return $instruction;
   }
