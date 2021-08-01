@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 
 <ul class="order_action submitbox">
-	<?php if ( 'cancelled' != $order->get_status() ): ?>
+	<?php if ( 'cancelled' == $order->get_status() ): ?>
 		<li class="begateway-erip-admin-section-li-small">
       <?php echo __( 'Заказ отменен', 'woocommerce-begateway-erip' ); ?>
     </li>

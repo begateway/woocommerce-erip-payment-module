@@ -56,32 +56,60 @@ class WC_Gateway_Begateway_Erip extends WC_Payment_Gateway {
   private function plugin_url()
   {
     return $this->plugin;
-  }// end plugin_url
+  }
+
   /**
    *this function is called via the wp-api when the begateway server sends
    *callback data
   */
   function validate_ipn_request() {
+    $this->log( 'Received webhook json: ' . PHP_EOL . file_get_contents( 'php://input' ) );
+
     $webhook = new \BeGateway\Webhook;
-    $this->_init();
 
-    $this->log('Received webhook json: ' . file_get_contents('php://input'));
+    \BeGateway\Settings::$shopId = $this->get_option( 'erip_id_magazin' );
+    \BeGateway\Settings::$shopKey = $this->get_option( 'erip_API_key' );
 
-    if ( ! $this->validate_ipn_amount($webhook) ) {
+    list( $order_id, $order_key ) = explode( ';', $webhook->getTrackingId() );
+
+    if ( ! $this->validate_ipn_order_key( $webhook ) ) {
       $this->log(
-        '----------- Invalid amount webhook --------------' . PHP_EOL .
-        "Order No: ".$webhook->getTrackingId() . PHP_EOL .
+        '----------- Invalid order key --------------' . PHP_EOL .
+        "Order No: " . $order_id . PHP_EOL .
         "UID: ".$webhook->getUid() . PHP_EOL .
         '--------------------------------------------'
       );
 
-      wp_die( "beGateway Notify Amount Failure" );
+      die( "beGateway Notify Key Failure" );
+    }
+
+    if ( ! $this->validate_ipn_amount( $webhook ) ) {
+      $this->log(
+        '----------- Invalid amount webhook --------------' . PHP_EOL .
+        "Order No: " . $order_id . PHP_EOL .
+        "UID: ".$webhook->getUid() . PHP_EOL .
+        '--------------------------------------------'
+      );
+
+      die( "beGateway Notify Amount Failure" );
+    }
+
+    if ( ! $this->validate_ipn_transaction_id( $webhook ) ) {
+      $this->log(
+        '----------- Mismatch transaction id webhook --------------' . PHP_EOL .
+        "Order No: " . $order_id . PHP_EOL .
+        "UID: " . $webhook->getUid() . PHP_EOL .
+        "Saved UID: ". get_post_meta( $order_id, '_begateway_transaction_id', true ) . PHP_EOL .
+        '--------------------------------------------'
+      );
+
+      die( "beGateway Notify Transaction Id Failure" );
     }
 
     if ( $webhook->isAuthorized() ) {
       $this->log(
         '-------------------------------------------' . PHP_EOL .
-        "Order No: ".$webhook->getTrackingId() . PHP_EOL .
+        "Order No: " . $order_id . PHP_EOL .
         "UID: ".$webhook->getUid() . PHP_EOL .
         '--------------------------------------------'
       );
@@ -91,18 +119,17 @@ class WC_Gateway_Begateway_Erip extends WC_Payment_Gateway {
     } else {
       $this->log(
         '----------- Unauthorized webhook --------------' . PHP_EOL .
-        "Order No: ".$webhook->getTrackingId() . PHP_EOL .
+        "Order No: " . $order_id . PHP_EOL .
         "UID: ".$webhook->getUid() . PHP_EOL .
         '--------------------------------------------'
       );
 
-      wp_die( "beGateway Notify Failure" );
+      die( "beGateway Notify Failure" );
     }
   }
-  //end of check_ipn_response
 
   protected function validate_ipn_amount( $webhook ) {
-    $order_id = $webhook->getTrackingId();
+    list( $order_id, $order_key ) = explode( ';', $webhook->getTrackingId() );
     $order = new WC_Order( $order_id );
 
     if ( ! $order ) {
@@ -121,80 +148,71 @@ class WC_Gateway_Begateway_Erip extends WC_Payment_Gateway {
       $transaction->amount == $money->getCents();
   }
 
+  protected function validate_ipn_transaction_id( $webhook ) {
+    list( $order_id, $order_key ) = explode( ';', $webhook->getTrackingId() );
+    $order = new WC_Order( $order_id );
+
+    return $webhook->getUid() === $order->get_meta( '_begateway_transaction_id', true );
+  }
+
+  protected function validate_ipn_order_key( $webhook ) {
+    list( $order_id, $order_key ) = explode( ';', $webhook->getTrackingId() );
+    $order = new WC_Order( $order_id );
+    return $order->key_is_valid( $order_key );
+  }
+
   function process_ipn_request($webhook) {
-    $order_id = $webhook->getTrackingId();
+    list( $order_id, $order_key ) = explode( ';', $webhook->getTrackingId() );
     $order = new WC_Order( $order_id );
     $type = $webhook->getResponse()->transaction->type;
-    if (in_array($type, array('payment','authorization'))) {
+    if ( $type == 'payment' ) {
       $status = $webhook->getStatus();
 
       $this->log(
         'Transaction type: ' . $type . PHP_EOL .
-        'Payment status '. $status . PHP_EOL .
+        'Payment status: '. $status . PHP_EOL .
         'UID: ' . $webhook->getUid() . PHP_EOL .
         'Message: ' . $webhook->getMessage()
       );
 
-      if ($webhook->isSuccess()) {
+      if ( $webhook->isSuccess() ) {
         $order->payment_complete( $webhook->getUid() );
-
-        if ( 'authorization' == $type ) {
-          update_post_meta($order_id, '_begateway_transaction_captured', 'no' );
-          update_post_meta($order_id, '_begateway_transaction_captured_amount', 0 );
-        } else {
-          update_post_meta($order_id, '_begateway_transaction_captured', 'yes' );
-          update_post_meta($order_id, '_begateway_transaction_captured_amount', $order->get_total() );
-        }
-        update_post_meta($order_id, '_begateway_transaction_refunded_amount', 0 );
-
-        update_post_meta($order_id, '_begateway_transaction_payment_method', $webhook->getPaymentMethod() );
-
-        $pm = $webhook->getPaymentMethod();
-
-        if ( $pm && isset( $webhook->getResponse()->transaction->$pm->token ) ) {
-          $this->save_card_id( $webhook->getResponse()->transaction->$pm, $order );
-        }
-
-        $this->save_transaction_id($webhook, $order);
-
-      } elseif ($webhook->isFailed()) {
-        $order->update_status( 'failed', $webhook->getMessage() );
       }
     }
-  }//end function
+  }
 
-	protected function generate_erip_page( $order_id ) {
-
-    $order = new WC_Order( $order_id );
-    $this->log( __( 'Создаем страницу оплаты для заказа' ) . " ". $order->get_order_number());
-
-		// Проверяем режим работы обработки заказов плагина
-		if ($this->get_option('type_sposoba_oplati') == 'manual') {
-			//В случае ручной обработки заказов, выдаём сообщение
-			return wpautop( $this->get_option( 'description_configuration_manual_mode' ) );
-		}
-
-		$api = new Erip_API;
-		$api->setDomainAPI( self::DOMAIN_API );
-		$api->setIdShop( $this->get_option( 'erip_id_magazin') );
-		$api->setApiKeyShop( $this->get_option( 'erip_API_key') );
-		//Получаем информацию о проведенном платеже в системе ЕРИП
-		$dataPaymentsEripSystem = $api->getInfoPaymentsWithOrderID( $order->get_id() );
-
-		//Замена плейсхолдеров на данные из отвера платёжной системы
-		$instructionEripPays = isset( $dataPaymentsEripSystem->transaction->erip->instruction[0] ) ?
-									$dataPaymentsEripSystem->transaction->erip->instruction[0]
-									:
-									$dataPaymentsEripSystem->transaction->erip->instruction;
-
-		$message = wpautop( $this->get_option( 'description_configuration_auto_mode') );
-		$message = str_replace("{{instruction_erip}}", $instructionEripPays, $message);
-		$message = str_replace("{{order_number}}", $dataPaymentsEripSystem->transaction->order_id, $message);
-
-    $this->log( __( 'Сформирована инструкция по оплате' ) . " ". $message );
-
-		return $message;
-	}
+	// protected function generate_erip_page( $order_id ) {
+  //
+  //   $order = new WC_Order( $order_id );
+  //   $this->log( __( 'Создаем страницу оплаты для заказа' ) . " ". $order->get_order_number());
+  //
+	// 	// Проверяем режим работы обработки заказов плагина
+	// 	if ($this->get_option('type_sposoba_oplati') == 'manual') {
+	// 		//В случае ручной обработки заказов, выдаём сообщение
+	// 		return wpautop( $this->get_option( 'description_configuration_manual_mode' ) );
+	// 	}
+  //
+	// 	$api = new Erip_API;
+	// 	$api->setDomainAPI( self::DOMAIN_API );
+	// 	$api->setIdShop( $this->get_option( 'erip_id_magazin') );
+	// 	$api->setApiKeyShop( $this->get_option( 'erip_API_key') );
+	// 	//Получаем информацию о проведенном платеже в системе ЕРИП
+	// 	$dataPaymentsEripSystem = $api->getInfoPaymentsWithOrderID( $order->get_id() );
+  //
+	// 	//Замена плейсхолдеров на данные из отвера платёжной системы
+	// 	$instructionEripPays = isset( $dataPaymentsEripSystem->transaction->erip->instruction[0] ) ?
+	// 								$dataPaymentsEripSystem->transaction->erip->instruction[0]
+	// 								:
+	// 								$dataPaymentsEripSystem->transaction->erip->instruction;
+  //
+	// 	$message = wpautop( $this->get_option( 'description_configuration_auto_mode') );
+	// 	$message = str_replace("{{instruction_erip}}", $instructionEripPays, $message);
+	// 	$message = str_replace("{{order_number}}", $dataPaymentsEripSystem->transaction->order_id, $message);
+  //
+  //   $this->log( __( 'Сформирована инструкция по оплате' ) . " ". $message );
+  //
+	// 	return $message;
+	// }
 
 	// Build the administration fields for this specific Gateway
 	public function init_form_fields() {
@@ -207,12 +225,11 @@ class WC_Gateway_Begateway_Erip extends WC_Payment_Gateway {
 	public function create_invoice_with_erip( $order ) {
 		$money = new \BeGateway\Money( $order->get_total(), $order->get_currency() );
 
-    $notification_url = WC()->api_request_url('WC_Payment_Gateway_Begateway_Erip', is_ssl());
+    $notification_url = WC()->api_request_url( 'WC_Gateway_Begateway_Erip', is_ssl() );
     $notification_url = str_replace( '0.0.0.0', 'webhook.begateway.com:8443', $notification_url );
 
 		$arrayDataInvoice = [
  			"request" => [
- 				//@NOTICE: getAmount vs getCents
 				"amount" => $money->getCents(),
 				"currency" => $money->getCurrency(),
 				"description" => "Оплата заказа # ".$order->get_order_number(),
@@ -221,7 +238,7 @@ class WC_Gateway_Begateway_Erip extends WC_Payment_Gateway {
 				"order_id" => $order->get_id(),
         "expired_at" => date( "c", (int)$this->get_option( 'payment_valid' ) * 60 + time() + 1 ),
 				"notification_url" => $notification_url,
-        "tracking_id" => $order->get_order_key(),
+        "tracking_id" => $order->get_id() . ';' . $order->get_order_key(),
 				"customer" => [
 					"first_name" => $order->get_billing_first_name(),
 					"last_name" => $order->get_billing_last_name(),
@@ -417,7 +434,7 @@ class WC_Gateway_Begateway_Erip extends WC_Payment_Gateway {
 	 * @param bool     $plain_text Email format: plain text or HTML.
 	 */
 	public function email_instructions( $order, $sent_to_admin, $plain_text = false ) {
-    $this->_instruction = get_post_meta( $order->get_id(), '_begateway_erip_instruction_email', true);
+    $this->_instruction = $order->get_meta( '_begateway_erip_instruction_email', true);
 
 		if ( $this->_instruction &&
          ! $sent_to_admin &&
@@ -489,7 +506,8 @@ class WC_Gateway_Begateway_Erip extends WC_Payment_Gateway {
      * @return boolean
   	 */
   public function can_cancel_bill( $order ) {
-    return true;
+    return $order->get_status() == 'pending' &&
+      ! empty( $order->get_meta( '_begateway_transaction_id', true ) );
   }
 
   /**
@@ -499,7 +517,8 @@ class WC_Gateway_Begateway_Erip extends WC_Payment_Gateway {
    * @return boolean
   */
   public function can_create_bill( $order ) {
-    return true;
+    return $order->get_status() == 'on-hold' &&
+      empty( $order->get_meta( '_begateway_transaction_id', true ) );
   }
 
   /**
