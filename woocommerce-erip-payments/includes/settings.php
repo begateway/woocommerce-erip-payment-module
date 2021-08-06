@@ -88,7 +88,7 @@ $settings = array(
     'description' => __( '{{fio}}, {{order_number}}, {{name_shop}}, {{instruction_erip}}', 'woocommerce-begateway-erip' ),
   ),
   //Текст E-mail сообщения с информацией как оплатить заказ в системе ЕРИП
-  'description_erip_order_pay' => array(
+  'description_email_erip_instruction' => array(
     'title'		=> __( 'Текст для e-mail сообщения с инструкцией об оплате', 'woocommerce-begateway-erip' ),
     'type'		=> 'textarea',
     'desc_tip'	=> __( 'Введите текст сообщения, которое ваш покупатель получит после создания заказа', 'woocommerce-begateway-erip' ),

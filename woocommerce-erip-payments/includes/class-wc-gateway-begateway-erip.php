@@ -18,10 +18,8 @@ class WC_Gateway_Begateway_Erip extends WC_Payment_Gateway {
 		$this->init_form_fields();
 		$this->init_settings();
 
-    // add_action( 'woocommerce_receipt_' . $this->id, array( $this, 'receipt_page' ) );
     add_action( 'woocommerce_thankyou_' . $this->id, array( $this, 'thankyou_page' ) );
     add_action( 'woocommerce_api_wc_gateway_' . $this->id, array( $this, 'validate_ipn_request' ) );
-    add_action( 'woocommerce_email_before_order_table', array( $this, 'email_instructions' ), 10, 3 );
     add_action( 'woocommerce_update_options_payment_gateways', array($this, 'process_admin_options' ) );
     add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'process_admin_options' ) );
   }
@@ -35,10 +33,6 @@ class WC_Gateway_Begateway_Erip extends WC_Payment_Gateway {
 		$this->title              = $this->get_option( 'name_sposoba_oplati' );
 		$this->description        = wpautop( $this->get_option( 'description_sposoba_oplati') );
   }
-
-  // function receipt_page( $order_id ) {
-  //   echo $this->generate_erip_page( $order_id );
-  // }
 
   function thankyou_page( $order_id )
   {
@@ -181,39 +175,6 @@ class WC_Gateway_Begateway_Erip extends WC_Payment_Gateway {
     }
   }
 
-	// protected function generate_erip_page( $order_id ) {
-  //
-  //   $order = new WC_Order( $order_id );
-  //   $this->log( __( 'Создаем страницу оплаты для заказа' ) . " ". $order->get_order_number());
-  //
-	// 	// Проверяем режим работы обработки заказов плагина
-	// 	if ($this->get_option('type_sposoba_oplati') == 'manual') {
-	// 		//В случае ручной обработки заказов, выдаём сообщение
-	// 		return wpautop( $this->get_option( 'description_configuration_manual_mode' ) );
-	// 	}
-  //
-	// 	$api = new Erip_API;
-	// 	$api->setDomainAPI( self::DOMAIN_API );
-	// 	$api->setIdShop( $this->get_option( 'erip_id_magazin') );
-	// 	$api->setApiKeyShop( $this->get_option( 'erip_API_key') );
-	// 	//Получаем информацию о проведенном платеже в системе ЕРИП
-	// 	$dataPaymentsEripSystem = $api->getInfoPaymentsWithOrderID( $order->get_id() );
-  //
-	// 	//Замена плейсхолдеров на данные из отвера платёжной системы
-	// 	$instructionEripPays = isset( $dataPaymentsEripSystem->transaction->erip->instruction[0] ) ?
-	// 								$dataPaymentsEripSystem->transaction->erip->instruction[0]
-	// 								:
-	// 								$dataPaymentsEripSystem->transaction->erip->instruction;
-  //
-	// 	$message = wpautop( $this->get_option( 'description_configuration_auto_mode') );
-	// 	$message = str_replace("{{instruction_erip}}", $instructionEripPays, $message);
-	// 	$message = str_replace("{{order_number}}", $dataPaymentsEripSystem->transaction->order_id, $message);
-  //
-  //   $this->log( __( 'Сформирована инструкция по оплате' ) . " ". $message );
-  //
-	// 	return $message;
-	// }
-
 	// Build the administration fields for this specific Gateway
 	public function init_form_fields() {
     $this->form_fields = include __DIR__ . '/settings.php';
@@ -269,8 +230,6 @@ class WC_Gateway_Begateway_Erip extends WC_Payment_Gateway {
     $response = $this->_api_client( $arrayDataInvoice );
 
     if ( $response ) {
-  		// Отправляем инструкцию как оплатить через ЕРИП
-  		// $this->sendEripInstructionEmail( $order, $response );
   		update_post_meta( $order->get_id(), '_begateway_transaction_id', $response->transaction->uid );
     } else {
       return new WP_Error( 'begateway_error', __( 'Ошибка создания счета в ЕРИП', 'woocommerce-begateway' ) );
@@ -326,38 +285,52 @@ class WC_Gateway_Begateway_Erip extends WC_Payment_Gateway {
     return $response;
   }
 
-	/*
-		Отправка сообщения с инструкцией об оплате
-	*/
-	protected function sendEripInstructionEmail( $order, $dataPaymentsEripSystem )
+  /**
+   * Отправка сообщения с инструкцией об оплате
+   *
+   * @access protected
+   * @param WC_Order $order Order object.
+   * @return         mixed
+   */
+
+	protected function _email_erip_instruction( $order )
 	{
-		global $woocommerce;
-		if (!$order) return FALSE;
+    if ( ! $order ) {
+      return false;
+    }
 
-    // Create a mailer
-  	$mailer = $woocommerce->mailer();
+  	$mailer = WooCommerce::instance()->mailer();
 
-  	$message_body = wpautop( wptexturize( $this->get_option( 'description_erip_order_pay' ) ) );
-		//Замена плейсхолдеров на данные из отвера платёжной системы
-		$instructionEripPays = isset($dataPaymentsEripSystem->transaction->erip->instruction[0]) ?
-									$dataPaymentsEripSystem->transaction->erip->instruction[0]
-									:
-									$dataPaymentsEripSystem->transaction->erip->instruction;
+    $message = $this->get_option( 'description_email_erip_instruction' );
 
-		$message_body = str_replace( "{{instruction_erip}}", $instructionEripPays, $message_body );
-		$message_body = str_replace( "{{order_number}}", $dataPaymentsEripSystem->transaction->order_id, $message_body );
-		$message_body = str_replace( "{{fio}}", $order->get_billing_first_name() ." ". $order->get_billing_last_name(), $message_body );
-		$message_body = str_replace( "{{name_shop}}", get_option( 'blogname' ), $message_body);
+    if ( empty ( trim( $message ) ) ) {
+      // пустое поле. не шлем письмо.
+      return false;
+    }
+    $message = $this->_update_instruction( $message, $order );
 
-  	//$message = $mailer->wrap_message($message_body);
-  	$message 		= $mailer->wrap_message(
-    // Message head and message body.
-    sprintf( __('Инструкция об оплате заказа № %s'), $order->get_order_number() ), $message_body );
-  	// Client email, email subject and message.
-		$result = $mailer->send( $order->get_billing_email(), sprintf( __( 'Инструкция об оплате заказа № %s', 'woocommerce-begateway-erip' ), $order->get_order_number() ), $message );
+    $this->log ( 'Отправляем e-mail ЕРИП инструкцию: ' . $message );
+
+    $message = $mailer->wrap_message('', $message);
+    $subject = sprintf(
+      __( 'Инструкция об оплате заказа № %s', 'woocommerce-begateway-erip' ),
+      $order->get_order_number()
+    );
+
+		return $mailer->send(
+      $order->get_billing_email(),
+      $subject,
+      $message
+    );
 	}
 
-	// Submit payment and handle response
+  /**
+   * Submit payment and handle response
+   *
+   * @access public
+   * @param int $order_id Order id
+   * @return         mixed
+   */
 	public function process_payment( $order_id ) {
 		global $woocommerce;
 
@@ -400,10 +373,7 @@ class WC_Gateway_Begateway_Erip extends WC_Payment_Gateway {
         $this->log( 'ЕРИП инструкция ' . $this->_instruction );
     		update_post_meta( $order->get_id(), '_begateway_erip_instruction', $this->_instruction );
 
-        $this->_instruction = $this->get_option( 'description_erip_order_pay' );
-        $this->_instruction = $this->_update_instruction( $this->_instruction, $order );
-
-    		update_post_meta( $order->get_id(), '_begateway_erip_instruction_email', $this->_instruction );
+        $this->_email_erip_instruction( $order );
 
   			// Mark as pending
   			$order->update_status('pending', __( 'Ожидается оплата заказа', 'woocommerce-begateway-erip' ));
@@ -422,25 +392,6 @@ class WC_Gateway_Begateway_Erip extends WC_Payment_Gateway {
         $this->log( 'Ошибка ' . $this->_response_erip->get_error_message() );
         wc_add_notice( $this->_response_erip->get_error_message(), 'error' );
       }
-		}
-	}
-
-  /**
-	 * Add content to the WC emails.
-	 *
-	 * @access public
-	 * @param WC_Order $order Order object.
-	 * @param bool     $sent_to_admin Sent to admin.
-	 * @param bool     $plain_text Email format: plain text or HTML.
-	 */
-	public function email_instructions( $order, $sent_to_admin, $plain_text = false ) {
-    $this->_instruction = $order->get_meta( '_begateway_erip_instruction_email', true);
-
-		if ( $this->_instruction &&
-         ! $sent_to_admin &&
-         $this->id === $order->get_payment_method() &&
-         $order->has_status( 'on-hold' ) ) {
-			echo wp_kses_post( wpautop( wptexturize( $this->_instruction ) ) . PHP_EOL );
 		}
 	}
 
