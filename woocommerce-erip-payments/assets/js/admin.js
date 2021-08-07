@@ -6,16 +6,16 @@ jQuery(document).ready(function ($) {
 		var self = $(this);
 
 		$.ajax({
-			url       : BeGateway_Admin.ajax_url,
+			url       : Begateway_Erip_Admin.ajax_url,
 			type      : 'POST',
 			data      : {
-				action        : 'begateway_cancel',
+				action        : 'begateway_cancel_bill',
 				nonce         : nonce,
 				order_id      : order_id
 			},
 			beforeSend: function () {
 				self.data('text', self.html());
-				self.html(BeGateway_Admin.text_wait);
+				self.html(Begateway_Erip_Admin.text_wait);
 				self.prop('disabled', true);
 			},
 			success   : function (response) {
@@ -38,16 +38,16 @@ jQuery(document).ready(function ($) {
 		var order_id = $(this).data('order-id');
 		var self = $(this);
 		$.ajax({
-			url       : BeGateway_Admin.ajax_url,
+			url       : Begateway_Erip_Admin.ajax_url,
 			type      : 'POST',
 			data      : {
-				action        : 'begateway_create',
+				action        : 'wp_ajax_begateway_create_bill',
 				nonce         : nonce,
 				order_id      : order_id
 			},
 			beforeSend: function () {
 				self.data('text', self.html());
-				self.html(BeGateway_Admin.text_wait);
+				self.html(Begateway_Erip_Admin.text_wait);
 				self.prop('disabled', true);
 			},
 			success   : function (response) {

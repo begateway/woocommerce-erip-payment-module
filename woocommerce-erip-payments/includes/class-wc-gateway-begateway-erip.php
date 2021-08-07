@@ -36,13 +36,13 @@ class WC_Gateway_Begateway_Erip extends WC_Payment_Gateway {
 
   function thankyou_page( $order_id )
   {
-    $this->log( 'Печать ЕРИП информации об оплате заказа ' . $order_id );
+    $this->log( 'Печать ЕРИП информации об оплате заказа ' . $order_id . PHP_EOL . ' -- ' . __FILE__ . ' - Line:' . __LINE__ );
 
     $this->_instruction = get_post_meta( $order_id, '_begateway_erip_instruction', true);
 
     if ( $this->_instruction ) {
       $instruction = wpautop( wptexturize( $this->_instruction ) );
-      $this->log( 'ЕРИП инструкция заказа ' . $order_id . ' Инструкция ' . $instruction );
+      $this->log( 'ЕРИП инструкция заказа ' . $order_id . ' Инструкция ' . $instruction . PHP_EOL . ' -- ' . __FILE__ . ' - Line:' . __LINE__ );
       echo $instruction;
     }
   }
@@ -57,7 +57,7 @@ class WC_Gateway_Begateway_Erip extends WC_Payment_Gateway {
    *callback data
   */
   function validate_ipn_request() {
-    $this->log( 'Received webhook json: ' . PHP_EOL . file_get_contents( 'php://input' ) );
+    $this->log( 'Received webhook json: ' . PHP_EOL . file_get_contents( 'php://input' ) . PHP_EOL . ' -- ' . __FILE__ . ' - Line:' . __LINE__ );
 
     $webhook = new \BeGateway\Webhook;
 
@@ -71,7 +71,7 @@ class WC_Gateway_Begateway_Erip extends WC_Payment_Gateway {
         '----------- Invalid order key --------------' . PHP_EOL .
         "Order No: " . $order_id . PHP_EOL .
         "UID: ".$webhook->getUid() . PHP_EOL .
-        '--------------------------------------------'
+        '--------------------------------------------' . PHP_EOL . ' -- ' . __FILE__ . ' - Line:' . __LINE__
       );
 
       die( "beGateway Notify Key Failure" );
@@ -82,7 +82,7 @@ class WC_Gateway_Begateway_Erip extends WC_Payment_Gateway {
         '----------- Invalid amount webhook --------------' . PHP_EOL .
         "Order No: " . $order_id . PHP_EOL .
         "UID: ".$webhook->getUid() . PHP_EOL .
-        '--------------------------------------------'
+        '--------------------------------------------' . PHP_EOL . ' -- ' . __FILE__ . ' - Line:' . __LINE__
       );
 
       die( "beGateway Notify Amount Failure" );
@@ -94,7 +94,7 @@ class WC_Gateway_Begateway_Erip extends WC_Payment_Gateway {
         "Order No: " . $order_id . PHP_EOL .
         "UID: " . $webhook->getUid() . PHP_EOL .
         "Saved UID: ". get_post_meta( $order_id, '_begateway_transaction_id', true ) . PHP_EOL .
-        '--------------------------------------------'
+        '--------------------------------------------' . PHP_EOL . ' -- ' . __FILE__ . ' - Line:' . __LINE__
       );
 
       die( "beGateway Notify Transaction Id Failure" );
@@ -105,7 +105,7 @@ class WC_Gateway_Begateway_Erip extends WC_Payment_Gateway {
         '-------------------------------------------' . PHP_EOL .
         "Order No: " . $order_id . PHP_EOL .
         "UID: ".$webhook->getUid() . PHP_EOL .
-        '--------------------------------------------'
+        '--------------------------------------------' . PHP_EOL . ' -- ' . __FILE__ . ' - Line:' . __LINE__
       );
 
       $this->process_ipn_request( $webhook );
@@ -115,7 +115,7 @@ class WC_Gateway_Begateway_Erip extends WC_Payment_Gateway {
         '----------- Unauthorized webhook --------------' . PHP_EOL .
         "Order No: " . $order_id . PHP_EOL .
         "UID: ".$webhook->getUid() . PHP_EOL .
-        '--------------------------------------------'
+        '--------------------------------------------' . PHP_EOL . ' -- ' . __FILE__ . ' - Line:' . __LINE__
       );
 
       die( "beGateway Notify Failure" );
@@ -166,7 +166,7 @@ class WC_Gateway_Begateway_Erip extends WC_Payment_Gateway {
         'Transaction type: ' . $type . PHP_EOL .
         'Payment status: '. $status . PHP_EOL .
         'UID: ' . $webhook->getUid() . PHP_EOL .
-        'Message: ' . $webhook->getMessage()
+        'Message: ' . $webhook->getMessage() . PHP_EOL . ' -- ' . __FILE__ . ' - Line:' . __LINE__
       );
 
       if ( $webhook->isSuccess() ) {
@@ -227,44 +227,53 @@ class WC_Gateway_Begateway_Erip extends WC_Payment_Gateway {
 			]
  		];
 
-    $response = $this->_api_client( $arrayDataInvoice );
+    $response = $this->_api_client( '/beyag/payments', $arrayDataInvoice );
 
     if ( $response ) {
-  		update_post_meta( $order->get_id(), '_begateway_transaction_id', $response->transaction->uid );
+      $order->update_meta_data( '_begateway_transaction_id', $response->transaction->uid );
+  		return $response;
     } else {
-      return new WP_Error( 'begateway_error', __( 'Ошибка создания счета в ЕРИП', 'woocommerce-begateway' ) );
+      return new WP_Error( '', __( 'Ошибка создания счета в ЕРИП', 'woocommerce-begateway-erip' ) );
     }
-
-		return $response;
 	}
 
   /** API client
   * @param array $arData data to post to API
   * @return mixed
   **/
-  protected function _api_client( $arData ) {
+  protected function _api_client( $path, $arData = array(), $method = 'POST' ) {
 
-    $url = 'https://'. self::DOMAIN_API .'/beyag/payments';
-    $headers = array(
-            "Content-Type: application/json",
-            "Content-Length: " . strlen( json_encode( $arData ) )
-        );
+    $url = 'https://'. self::DOMAIN_API . $path;
+
     $ch = curl_init( $url );
+
+    if ( $method == 'POST' ) {
+      $headers = array(
+        "Content-Type: application/json"
+      );
+
+      curl_setopt( $ch, CURLOPT_POST, 1 );
+
+      if ( count( $arData) > 0) {
+        $headers[ 'Content-Length: ' ] = strlen( json_encode( $arData ) );
+        curl_setopt( $ch, CURLOPT_POSTFIELDS, json_encode( $arData ) );
+      }
+    }
+
+    curl_setopt( $ch, CURLOPT_HTTPHEADER, $headers );
+    curl_setopt( $ch, CURLOPT_CUSTOMREQUEST, $method );
     curl_setopt( $ch, CURLOPT_PORT, 443 );
     curl_setopt( $ch, CURLOPT_HEADER, 0 );
     curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, 1 );
     curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
-    curl_setopt( $ch, CURLOPT_HTTPHEADER, $headers );
     curl_setopt( $ch, CURLOPT_FORBID_REUSE, 1 );
     curl_setopt( $ch, CURLOPT_FRESH_CONNECT, 1 );
-    curl_setopt( $ch, CURLOPT_POST, 1 );
     curl_setopt( $ch, CURLOPT_USERPWD, $this->get_option( 'erip_id_magazin' ).':'.$this->get_option( 'erip_API_key' ) );
-    curl_setopt( $ch, CURLOPT_POSTFIELDS, json_encode( $arData ) );
 
     $response = curl_exec( $ch );
 
     if ( $response === false ) {
-      $this->log( curl_errno( $ch ) . ': ' . curl_error( $ch ), 'error' );
+      $this->log( curl_errno( $ch ) . ': ' . curl_error( $ch ) . PHP_EOL . ' -- ' . __FILE__ . ' - Line:' . __LINE__ );
       curl_close( $ch );
       return false;
     }
@@ -273,12 +282,12 @@ class WC_Gateway_Begateway_Erip extends WC_Payment_Gateway {
     $response = json_decode( $response );
 
     if ( is_null( $response ) || $response === false ) {
-      $this->log( __( 'Ошибка обработки JSON-ответа', 'woocommerce-begateway-erip' ), 'error' );
+      $this->log( __( 'Ошибка обработки JSON-ответа', 'woocommerce-begateway-erip' ) . PHP_EOL . ' -- ' . __FILE__ . ' - Line:' . __LINE__ );
       return false;
     }
 
     if ( $response->transaction->status != 'pending' ) {
-      $this->log( __( 'Ошибка регистрации счета в ЕРИП', 'woocommerce-begateway-erip' ), 'error' );
+      $this->log( __( 'Ошибка регистрации счета в ЕРИП', 'woocommerce-begateway-erip' ) . PHP_EOL . ' -- ' . __FILE__ . ' - Line:' . __LINE__ );
       return false;
     }
 
@@ -292,9 +301,7 @@ class WC_Gateway_Begateway_Erip extends WC_Payment_Gateway {
    * @param WC_Order $order Order object.
    * @return         mixed
    */
-
-	protected function _email_erip_instruction( $order )
-	{
+	protected function _email_erip_instruction( $order ) {
     if ( ! $order ) {
       return false;
     }
@@ -335,64 +342,31 @@ class WC_Gateway_Begateway_Erip extends WC_Payment_Gateway {
 		global $woocommerce;
 
     $order = new WC_order( $order_id );
+    $result = true;
 
 		if ($this->get_option( 'type_sposoba_oplati' ) == 'manual') {
-      $this->log( 'Ручная выставление счета для заказа ' . $order_id );
-
-			//Оплата будет происходить в ручном режиме
-      $this->_instruction = $this->get_option( 'description_configuration_manual_mode' );
-      $this->_instruction = $this->_update_instruction( $this->_instruction, $order );
-
-      $this->log( 'ЕРИП инструкция ' . $this->_instruction );
-  		update_post_meta( $order->get_id(), '_begateway_erip_instruction', $this->_instruction );
-
-			// Mark as on-hold
-			$order->update_status( 'on-hold', __( 'Заказ требует уточнения остатков и обратного звонка клиенту', 'woocommerce-begateway-erip' ) );
-
-			// Reduce stock levels
-			wc_reduce_stock_levels( $order );
-
+      $this->create_bill_manual( $order );
 			// Remove cart
 			$woocommerce->cart->empty_cart();
-
-			// Return thankyou redirect
-			return array(
-				'result' => 'success',
-				'redirect' => $this->get_return_url( $order )
-			);
 		} else {
-      $this->log( 'Автоматическое выставление счета для заказа ' . $order_id );
-			$this->_response_erip = $this->create_invoice_with_erip( $order );
+      $response = $this->create_bill ( $order );
 
-      if ( !is_wp_error( $this->_response_erip ) ) {
-        $this->log( 'Успешно выставлен счет в ЕРИП для заказа ' . $order_id );
-
-        $this->_instruction = $this->get_option( 'description_configuration_auto_mode' );
-        $this->_instruction = $this->_update_instruction( $this->_instruction, $order );
-
-        $this->log( 'ЕРИП инструкция ' . $this->_instruction );
-    		update_post_meta( $order->get_id(), '_begateway_erip_instruction', $this->_instruction );
-
-        $this->_email_erip_instruction( $order );
-
-  			// Mark as pending
-  			$order->update_status('pending', __( 'Ожидается оплата заказа', 'woocommerce-begateway-erip' ));
-  			// Reduce stock levels
-        wc_reduce_stock_levels( $order );
-  			// Remove cart
-  			$woocommerce->cart->empty_cart();
-
-  			// Return thankyou redirect
-  			return array(
-  				'result' => 'success',
-  				'redirect' => $this->get_return_url( $order )
-  			);
+      if ( ! is_wp_error( $response ) ) {
+        // Remove cart
+        $woocommerce->cart->empty_cart();
       } else {
-        $this->log( 'Ошибка выставленя счета в ЕРИП для заказа ' . $order_id );
-        $this->log( 'Ошибка ' . $this->_response_erip->get_error_message() );
-        wc_add_notice( $this->_response_erip->get_error_message(), 'error' );
+        $result = false;
+        wc_add_notice( $response->get_error_message(), 'error' );
       }
 		}
+
+    if ( $result ) {
+      // Return thankyou redirect
+      return array(
+        'result' => 'success',
+        'redirect' => $this->get_return_url( $order )
+      );
+    }
 	}
 
   /**
@@ -425,6 +399,100 @@ class WC_Gateway_Begateway_Erip extends WC_Payment_Gateway {
     $instruction = str_replace( "{{name_shop}}", get_option( 'bname' ), $instruction);
 
     return $instruction;
+  }
+
+  /**
+	 * Cancels ERIP bill
+	 *
+	 * @param WC_Order $order The order object related to the transaction.
+   * @return null|WP_Error
+	 */
+  public function cancel_bill( $order ) {
+    $uid = $order->get_meta( '_begateway_transaction_id', true );
+
+    if ( ! isset( $uid ) || empty( $uid ) ) {
+      return new WP_Error( 'begateway_erip_error', __( 'Не найден номер операции, чтобы отменить ЕРИП счёт' , 'woocommerce-begateway-erip' ) );
+    }
+
+    if ( $this->id != $order->get_payment_method() ) {
+			return new WP_Error( 'begateway_erip_error', __( 'Недействительный способ оплаты' , 'woocommerce-begateway-erip' ) );
+		}
+
+    $this->log( "Отменяем счёт {$uid} of {$order->get_id()}" . PHP_EOL . ' -- ' . __FILE__ . ' - Line:' . __LINE__ );
+
+    $response = $this->_api_client( '/beyag/payments/' . $uid, [], 'DELETE' );
+
+    if ( $response ) {
+      $order->delete_meta( '_begateway_transaction_id' );
+    } else {
+      return new WP_Error( 'begateway_erip_error', __( 'Ошибка удаления счета в ЕРИП', 'woocommerce-begateway-erip' ) );
+    }
+		return $response;
+  }
+
+  /**
+	 * Creates ERIP bill
+	 *
+	 * @param WC_Order $order The order object related to the transaction.
+   * @return null|WP_Error
+	 */
+  public function create_bill( $order ) {
+    $uid = $order->get_meta( '_begateway_transaction_id', true );
+
+    if ( ! empty( $uid ) ) {
+      return new WP_Error( 'begateway_erip_error', __( 'Счёт в ЕРИП уже создан' , 'woocommerce-begateway-erip' ) );
+    }
+
+    if ( $this->id != $order->get_payment_method() ) {
+			return new WP_Error( 'begateway_erip_error', __( 'Недействительный способ оплаты' , 'woocommerce-begateway-erip' ) );
+		}
+
+    $this->log( 'Автоматическое выставление счета для заказа ' . $order->get_id() . PHP_EOL . ' -- ' . __FILE__ . ' - Line:' . __LINE__ );
+    $this->_response_erip = $this->create_invoice_with_erip( $order );
+
+    if ( ! is_wp_error( $this->_response_erip ) ) {
+      $this->log( 'Успешно выставлен счет в ЕРИП для заказа ' . $order->get_id() . PHP_EOL . ' -- ' . __FILE__ . ' - Line:' . __LINE__ );
+
+      $this->_instruction = $this->get_option( 'description_configuration_auto_mode' );
+      $this->_instruction = $this->_update_instruction( $this->_instruction, $order );
+
+      $this->log( 'ЕРИП инструкция ' . $this->_instruction . PHP_EOL . ' -- ' . __FILE__ . ' - Line:' . __LINE__ );
+      $order->update_meta_data( '_begateway_erip_instruction', $this->_instruction );
+
+      $this->_email_erip_instruction( $order );
+
+      // Mark as pending
+      $order->update_status('pending', __( 'Ожидается оплата заказа', 'woocommerce-begateway-erip' ));
+      // Reduce stock levels
+      wc_reduce_stock_levels( $order );
+    } else {
+      $this->log( "Ошибка выставления счёта в ЕРИП для заказа {$order->get_id()}" . PHP_EOL . ' -- ' . __FILE__ . ' - Line:' . __LINE__ );
+      $this->log( $this->_response_erip->get_error_message() . PHP_EOL . ' -- ' . __FILE__ . ' - Line:' . __LINE__ );
+    }
+		return $this->_response_erip;
+  }
+
+  /**
+	 * Creates ERIP bill (manually mode)
+	 *
+	 * @param WC_Order $order The order object related to the transaction.
+   * @return null
+	 */
+  public function create_bill_manual( $order ) {
+    $this->log( 'Ручное выставление счета для заказа ' . $order_id . PHP_EOL . ' -- ' . __FILE__ . ' - Line:' . __LINE__ );
+
+    //Оплата будет происходить в ручном режиме
+    $this->_instruction = $this->get_option( 'description_configuration_manual_mode' );
+    $this->_instruction = $this->_update_instruction( $this->_instruction, $order );
+
+    $this->log( 'ЕРИП инструкция ' . $this->_instruction . PHP_EOL . ' -- ' . __FILE__ . ' - Line:' . __LINE__ );
+    $order->update_meta_data( '_begateway_erip_instruction', $this->_instruction );
+
+    // Mark as on-hold
+    $order->update_status( 'on-hold', __( 'Заказ требует уточнения остатков и обратного звонка клиенту', 'woocommerce-begateway-erip' ) );
+
+    // Reduce stock levels
+    wc_reduce_stock_levels( $order );
   }
 
   /**

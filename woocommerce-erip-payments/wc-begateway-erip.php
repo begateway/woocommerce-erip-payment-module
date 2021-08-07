@@ -26,17 +26,19 @@ class WC_Begateway_Erip {
 
     // add meta boxes
     add_action( 'add_meta_boxes', array( $this, 'add_meta_boxes' ), 10, 2 );
+    // Add scripts and styles for admin
+		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
 
-    // // Add Admin Backend Actions
-    // add_action( 'wp_ajax_bepaid_send_bill_to_erip', array(
-    //   $this,
-    //   'ajax_bepaid_gateway_send_bill_to_erip'
-    // ) );
-    //
-    // add_action( 'wp_ajax_bepaid_erip_cancel', array(
-    //   $this,
-    //   'ajax_bepaid_gateway_erip_cancel'
-    // ) );
+    // Add Admin Backend Actions
+    add_action( 'wp_ajax_begateway_cancel_bill', array(
+      $this,
+      'ajax_begateway_cancel'
+    ) );
+
+    add_action( 'wp_ajax_begateway_create_bill', array(
+      $this,
+      'ajax_begateway_create'
+    ) );
   }
 
   public function init() {
@@ -171,6 +173,70 @@ class WC_Begateway_Erip {
       wp_enqueue_script( 'begateway-erip-gateway-admin-js' );
     }
   }
+
+  /**
+	 * Action for ERIP bill cancel
+	 */
+	public function ajax_begateway_cancel() {
+		if ( ! wp_verify_nonce( $_REQUEST['nonce'], 'begateway' ) ) {
+      wp_send_json_error( 'Invalid nonce' );
+			die();
+		}
+
+		$order_id = (int) $_REQUEST['order_id'];
+		$order = wc_get_order( $order_id );
+
+    if ( ! $order ) {
+      wp_send_json_error( __( 'Не верный номер заказа' ) );
+      die();
+    }
+
+		// Get Payment Gateway
+		$payment_method = $order->get_payment_method();
+		$gateways = WC()->payment_gateways()->get_available_payment_gateways();
+
+		/** @var WC_Gateway_Begateway_Erip $gateway */
+		$gateway = 	$gateways[ $payment_method ];
+		$result = $gateway->cancel_bill( $order );
+
+    if (!is_wp_error($result)) {
+			wp_send_json_success( __( 'Счёт в ЕРИП успешно отменён', 'woocommerce-begateway-erip' ) );
+    } else {
+			wp_send_json_error( $result->get_error_message() );
+    }
+	}
+
+  /**
+	 * Action for ERIP bill creation
+	 */
+	public function ajax_begateway_create() {
+    if ( ! wp_verify_nonce( $_REQUEST['nonce'], 'begateway' ) ) {
+      wp_send_json_error( 'Invalid nonce' );
+			die();
+		}
+
+		$order_id = (int) $_REQUEST['order_id'];
+		$order = wc_get_order( $order_id );
+
+    if ( ! $order ) {
+      wp_send_json_error( __( 'Не верный номер заказа' ) );
+      die();
+    }
+
+		// Get Payment Gateway
+		$payment_method = $order->get_payment_method();
+		$gateways = WC()->payment_gateways()->get_available_payment_gateways();
+
+		/** @var WC_Gateway_Begateway_Erip $gateway */
+		$gateway = 	$gateways[ $payment_method ];
+		$result = $gateway->create_bill( $order );
+
+    if (!is_wp_error($result)) {
+			wp_send_json_success( __( 'Счёт в ЕРИП успешно создан', 'woocommerce-begateway-erip' ) );
+    } else {
+			wp_send_json_error( $result->get_error_message() );
+    }
+	}
 
   /**
   * Get the pluging version
