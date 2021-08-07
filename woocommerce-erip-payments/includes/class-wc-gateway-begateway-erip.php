@@ -270,6 +270,9 @@ class WC_Gateway_Begateway_Erip extends WC_Payment_Gateway {
     curl_setopt( $ch, CURLOPT_FRESH_CONNECT, 1 );
     curl_setopt( $ch, CURLOPT_USERPWD, $this->get_option( 'erip_id_magazin' ).':'.$this->get_option( 'erip_API_key' ) );
 
+    $this->log( __( 'API запрос: ', 'woocommerce-begateway-erip' ) . $url . PHP_EOL . ' -- ' . __FILE__ . ' - Line:' . __LINE__ );
+    $this->log( __( 'Данные запроса: ', 'woocommerce-begateway-erip' ) . print_r( $arData, true) . PHP_EOL . ' -- ' . __FILE__ . ' - Line:' . __LINE__ );
+
     $response = curl_exec( $ch );
 
     if ( $response === false ) {
@@ -280,6 +283,8 @@ class WC_Gateway_Begateway_Erip extends WC_Payment_Gateway {
 
     curl_close($ch);
     $response = json_decode( $response );
+
+    $this->log( __( 'API ответ:', 'woocommerce-begateway-erip' ) . print_r( $response, true) . PHP_EOL . ' -- ' . __FILE__ . ' - Line:' . __LINE__ );
 
     if ( is_null( $response ) || $response === false ) {
       $this->log( __( 'Ошибка обработки JSON-ответа', 'woocommerce-begateway-erip' ) . PHP_EOL . ' -- ' . __FILE__ . ' - Line:' . __LINE__ );
