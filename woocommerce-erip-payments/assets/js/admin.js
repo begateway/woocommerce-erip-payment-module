@@ -41,7 +41,7 @@ jQuery(document).ready(function ($) {
 			url       : Begateway_Erip_Admin.ajax_url,
 			type      : 'POST',
 			data      : {
-				action        : 'wp_ajax_begateway_create_bill',
+				action        : 'begateway_create_bill',
 				nonce         : nonce,
 				order_id      : order_id
 			},
