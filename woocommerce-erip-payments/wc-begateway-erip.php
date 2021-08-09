@@ -249,3 +249,28 @@ class WC_Begateway_Erip {
 }
 
 new WC_Begateway_Erip();
+
+function admin_notice_erip_message() {
+    $plugin = isset( $_GET['plugin'] ) ? $_GET['plugin'] : false;
+
+    if ( ! $plugin || $plugin != 'begateway_erip') {
+      return;
+    }
+
+    $message = isset( $_GET['message'] ) ? $_GET['message'] : false;
+
+    if ( ! $message != 'create' || ! $message != 'cancel' ) {
+      return;
+    }
+
+    $message = ( $message == 'create' ) ?
+      __( 'Счёт в ЕРИП успешно создан', 'woocommerce-begateway-erip' ) :
+      __( 'Счёт в ЕРИП успешно отменён', 'woocommerce-begateway-erip' );
+
+    ?>
+    <div class="notice notice-success is-dismissible">
+        <p><?php echo $message; ?></p>
+    </div>
+    <?php
+}
+add_action( 'admin_notices', 'admin_notice_erip_message' );

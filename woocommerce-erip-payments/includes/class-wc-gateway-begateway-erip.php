@@ -233,7 +233,7 @@ class WC_Gateway_Begateway_Erip extends WC_Payment_Gateway {
       $order->update_meta_data( '_begateway_transaction_id', $response->transaction->uid );
   		return $response;
     } else {
-      return new WP_Error( '', __( 'Ошибка создания счета в ЕРИП', 'woocommerce-begateway-erip' ) );
+      return new WP_Error( '', __( 'Ошибка создания счёта в ЕРИП', 'woocommerce-begateway-erip' ) );
     }
 	}
 
@@ -291,8 +291,11 @@ class WC_Gateway_Begateway_Erip extends WC_Payment_Gateway {
       return false;
     }
 
-    if ( $response->transaction->status != 'pending' ) {
-      $this->log( __( 'Ошибка регистрации счета в ЕРИП', 'woocommerce-begateway-erip' ) . PHP_EOL . ' -- ' . __FILE__ . ' - Line:' . __LINE__ );
+    if ( $method == 'DELETE' && $response->message != 'Successfully deleted' ) {
+      $this->log( __( 'Ошибка удаления счёта в ЕРИП', 'woocommerce-begateway-erip' ) . PHP_EOL . ' -- ' . __FILE__ . ' - Line:' . __LINE__ );
+      return false;
+    } elseif ( $response->transaction->status != 'pending' ) {
+      $this->log( __( 'Ошибка регистрации счёта в ЕРИП', 'woocommerce-begateway-erip' ) . PHP_EOL . ' -- ' . __FILE__ . ' - Line:' . __LINE__ );
       return false;
     }
 
@@ -430,7 +433,7 @@ class WC_Gateway_Begateway_Erip extends WC_Payment_Gateway {
     if ( $response ) {
       $order->delete_meta( '_begateway_transaction_id' );
     } else {
-      return new WP_Error( 'begateway_erip_error', __( 'Ошибка удаления счета в ЕРИП', 'woocommerce-begateway-erip' ) );
+      return new WP_Error( 'begateway_erip_error', __( 'Ошибка удаления счёта в ЕРИП', 'woocommerce-begateway-erip' ) );
     }
 		return $response;
   }
@@ -452,7 +455,7 @@ class WC_Gateway_Begateway_Erip extends WC_Payment_Gateway {
 			return new WP_Error( 'begateway_erip_error', __( 'Недействительный способ оплаты' , 'woocommerce-begateway-erip' ) );
 		}
 
-    $this->log( 'Автоматическое выставление счета для заказа ' . $order->get_id() . PHP_EOL . ' -- ' . __FILE__ . ' - Line:' . __LINE__ );
+    $this->log( 'Автоматическое выставление счёта для заказа ' . $order->get_id() . PHP_EOL . ' -- ' . __FILE__ . ' - Line:' . __LINE__ );
     $this->_response_erip = $this->create_invoice_with_erip( $order );
 
     if ( ! is_wp_error( $this->_response_erip ) ) {
@@ -484,7 +487,7 @@ class WC_Gateway_Begateway_Erip extends WC_Payment_Gateway {
    * @return null
 	 */
   public function create_bill_manual( $order ) {
-    $this->log( 'Ручное выставление счета для заказа ' . $order_id . PHP_EOL . ' -- ' . __FILE__ . ' - Line:' . __LINE__ );
+    $this->log( 'Ручное выставление счёта для заказа ' . $order_id . PHP_EOL . ' -- ' . __FILE__ . ' - Line:' . __LINE__ );
 
     //Оплата будет происходить в ручном режиме
     $this->_instruction = $this->get_option( 'description_configuration_manual_mode' );

@@ -22,11 +22,15 @@ jQuery(document).ready(function ($) {
 				self.html(self.data('text'));
 				self.prop('disabled', false);
 				if (!response.success) {
-					alert(response.data);
+  				alert(response.data);
 					return false;
 				}
 
-				window.location.href = location.href;
+        url = new URL(window.location.href);
+        url.searchParams.set('plugin', 'begateway_erip');
+        url.searchParams.set('message', 'cancel');
+
+        window.location.href = url.toString();
 			}
 		});
 	});
@@ -54,11 +58,15 @@ jQuery(document).ready(function ($) {
 				self.html(self.data('text'));
 				self.prop('disabled', false);
 				if (!response.success) {
-					alert(response.data);
+				  alert(response.data);
 					return false;
 				}
 
-				window.location.href = location.href;
+        url = new URL(window.location.href);
+        url.searchParams.set('plugin', 'begateway_erip');
+        url.searchParams.set('message', 'create');
+
+				window.location.href = url.toString();
 			}
 		});
 	});
