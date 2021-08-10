@@ -27,8 +27,8 @@ jQuery(document).ready(function ($) {
 				}
 
         url = new URL(window.location.href);
-        url.searchParams.set('plugin', 'begateway_erip');
-        url.searchParams.set('message', 'cancel');
+        url.searchParams.set('plugin', Begateway_Erip_Admin.module_id);
+        url.searchParams.set('plugin_message', 'cancel');
 
         window.location.href = url.toString();
 			}
@@ -63,8 +63,8 @@ jQuery(document).ready(function ($) {
 				}
 
         url = new URL(window.location.href);
-        url.searchParams.set('plugin', 'begateway_erip');
-        url.searchParams.set('message', 'create');
+        url.searchParams.set('plugin', Begateway_Erip_Admin.module_id);
+        url.searchParams.set('plugin_message', 'create');
 
 				window.location.href = url.toString();
 			}
