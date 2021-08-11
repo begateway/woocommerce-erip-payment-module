@@ -291,9 +291,11 @@ class WC_Gateway_Begateway_Erip extends WC_Payment_Gateway {
       return false;
     }
 
-    if ( $method == 'DELETE' && $response->message != 'Successfully deleted' ) {
-      $this->log( __( 'Ошибка удаления счёта в ЕРИП', 'woocommerce-begateway-erip' ) . PHP_EOL . ' -- ' . __FILE__ . ' - Line:' . __LINE__ );
-      return false;
+    if ( $method == 'DELETE' ) {
+      if ( $response->message != 'Successfully deleted' ) {
+        $this->log( __( 'Ошибка удаления счёта в ЕРИП', 'woocommerce-begateway-erip' ) . PHP_EOL . ' -- ' . __FILE__ . ' - Line:' . __LINE__ );
+        return false;
+      }
     } elseif ( $response->transaction->status != 'pending' ) {
       $this->log( __( 'Ошибка регистрации счёта в ЕРИП', 'woocommerce-begateway-erip' ) . PHP_EOL . ' -- ' . __FILE__ . ' - Line:' . __LINE__ );
       return false;
@@ -431,7 +433,8 @@ class WC_Gateway_Begateway_Erip extends WC_Payment_Gateway {
     $response = $this->_api_client( '/beyag/payments/' . $uid, [], 'DELETE' );
 
     if ( $response ) {
-      $order->delete_meta( '_begateway_transaction_id' );
+      $order->update_meta_data( '_begateway_transaction_id', null );
+      $order->update_status( 'on-hold', __( 'Заказ требует уточнения остатков и обратного звонка клиенту', 'woocommerce-begateway-erip' ) );
     } else {
       return new WP_Error( 'begateway_erip_error', __( 'Ошибка удаления счёта в ЕРИП', 'woocommerce-begateway-erip' ) );
     }
