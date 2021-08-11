@@ -1,0 +1,91 @@
+.begateway-erip-logos {
+  /* display: table-cell; */ }
+
+.begateway-erip-logo {
+  /* float: left; */
+  /* display: inline-block; */
+  /* padding: 5px; */ }
+
+.begateway-erip-admin-section-li-header {
+  width: 100%;
+  font-weight: bold; }
+
+.begateway-erip-admin-section-li-header-small {
+  width: 100%;
+  font-weight: bold;
+  font-size: small;
+  margin-bottom: 0px; }
+
+.begateway-erip-admin-section-li {
+  width: 100%; }
+
+.begateway-erip-admin-section-li-small {
+  width: 100%;
+  font-size: small;
+  margin-top: 0px; }
+
+.begateway-erip-full-width, .begateway-erip-full-width .button {
+  width: 100%;
+  display: block;
+  text-align: center;
+  clear: both; }
+
+.begateway-erip-balance {
+  margin-bottom: 0; }
+
+.begateway-erip-balance.last {
+  margin-bottom: 5px; }
+
+.begateway-erip-balance:after {
+  clear: both;
+  content: "";
+  display: table; }
+
+.begateway-erip-balance__label,
+.begateway-erip-balance__amount {
+  background-color: #f9f9f9;
+  box-sizing: border-box;
+  float: left;
+  padding: 7px 10px;
+  text-transform: uppercase;
+  font-size: 10px;
+  color: #8a8a8a; }
+
+.begateway-erip-balance__label {
+  font-weight: bold;
+  width: 60%;
+  border-right: 2.5px solid #FFF; }
+
+.begateway-erip-balance__amount {
+  border-right: 0;
+  width: 40%;
+  border-left: 2.5px solid #FFF;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex; }
+
+.begateway-erip-balance__currency {
+  margin-right: 10px; }
+
+.begateway-erip-balance.last .begateway-erip-balance__currency {
+  margin-right: 0; }
+
+.begateway-erip-admin-card-logo {
+  text-align: center;
+  margin-right: 25px;
+  max-width: 100px; }
+
+#payment .wc_payment_methods li label {
+  display: flex !important;
+  align-items: center; }
+
+#payment .wc_payment_methods li label .begateway-erip-logos {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 0 0 auto;
+  justify-content: flex-end;
+  max-width: 300px; }
+
+#payment .wc_payment_methods li label .begateway-erip-logos .begateway-erip-logo img {
+  margin: .25rem; }
