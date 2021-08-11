@@ -38,7 +38,7 @@ $settings = array(
     'type'		=> 'text',
     'desc_tip'	=> __( 'Введите сообщение, которой будет выводиться в чеке после оплаты заказа', 'woocommerce-begateway-erip' ),
     'default'	=> __( 'Спасибо за оплату', 'woocommerce-begateway-erip' ),
-    'description' => __( '{{fio}}, {{order_number}}, {{name_shop}}', 'woocommerce-begateway-erip' ),
+    'description' => __( 'Текст может содержать метки: {{fio}} - имя и фамилия покупателя, {{order_number}} - номер заказа, {{name_shop}} - имя вашего магазина.', 'woocommerce-begateway-erip' ),
   ),
   //Имя способа оплаты для покупателя на странице выбора
   'name_sposoba_oplati' => array(
@@ -85,7 +85,7 @@ $settings = array(
 Обратите внимание: если вы откажетесь от покупки, для возврата денег вам придется обратиться в магазин.
 ', 'woocommerce-begateway-erip' ),
     'css'		=> 'max-width:80%; height: 200px;',
-    'description' => __( '{{fio}}, {{order_number}}, {{name_shop}}, {{instruction_erip}}', 'woocommerce-begateway-erip' ),
+    'description' => __( 'Текст может содержать метки: {{fio}} - имя и фамилия покупателя, {{order_number}} - номер заказа, {{name_shop}} - имя вашего магазина, {{instruction_erip}} - инструкция по оплате через ЕРИП.', 'woocommerce-begateway-erip' ),
   ),
   //Текст E-mail сообщения с информацией как оплатить заказ в системе ЕРИП
   'description_email_erip_instruction' => array(
@@ -113,8 +113,7 @@ $settings = array(
 Обратите внимание: если вы откажетесь от покупки, для возврата денег вам придется обратиться в магазин.
 ', 'woocommerce-begateway-erip' ),
     'css'		=> 'max-width:80%; height: 200px;',
-    'description' => __( '{{fio}}, {{order_number}}, {{name_shop}}, {{instruction_erip}}', 'woocommerce-begateway-erip' ),
-
+    'description' => __( 'Текст может содержать метки: {{fio}} - имя и фамилия покупателя, {{order_number}} - номер заказа, {{name_shop}} - имя вашего магазина, {{instruction_erip}} - инструкция по оплате через ЕРИП, {{qr_code}} - QR-код для оплаты через мобильное приложение банка.', 'woocommerce-begateway-erip' ),
   ),
   // сколько минут дать на оплату
   'payment_valid' => array(
@@ -123,17 +122,17 @@ $settings = array(
     'description' => __( 'Укажите количество минут, в течение которых заказ должен быть оплачен', 'woocommerce-begateway-erip' ),
     'default' => '60'
   ),
-  //Создание счета в ЕРИП
+  // Создание счёта в ЕРИП
   'type_sposoba_oplati' => array(
-    'title'		=> __( 'Создание счета в ЕРИП', 'woocommerce-begateway-erip' ),
-      'desc'    	=> __( 'Выберите тип создания счета для пользователя', 'woocommerce-begateway-erip' ),
+    'title'		=> __( 'Создание счёта в ЕРИП', 'woocommerce-begateway-erip' ),
+      'desc'    	=> __( 'Выберите тип создания счёта для пользователя', 'woocommerce-begateway-erip' ),
       'css'     	=> 'min-width:150px;',
       'std'     	=> 'left',
       'default' 	=> 'left',
       'type'    	=> 'select',
       'options' 	=> array(
-          'manual'	=> __( 'Ручное создание счета', 'woocommerce-begateway-erip' ),
-          'auto'		=> __( 'Автоматическое создание счета', 'woocommerce-begateway-erip' ),
+          'auto'		=> __( 'Автоматическое создание счёта', 'woocommerce-begateway-erip' ),
+          'manual'	=> __( 'Ручное создание счёта', 'woocommerce-begateway-erip' )
       ),
       'desc_tip' 	=>  true,
     ),
