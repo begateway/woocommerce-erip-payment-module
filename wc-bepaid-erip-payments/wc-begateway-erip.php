@@ -7,15 +7,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 Plugin Name: WooCommerce ЕРИП платежи
 Plugin URI: https://github.com/begateway/woocommerce-erip-payment-module
 Description: Модуль приёма ЕРИП платежей через агрегатора bePaid.by
-Version: 3.5.0
-Author: eComCharge
+Version: 4.0.0
+Author: bePaid
 Author Email: help@bepaid.by
 
 Text Domain: woocommerce-begateway-erip
 Domain Path: /languages/
 
 WC requires at least: 3.2.0
-WC tested up to: 5.0.0
+WC tested up to: 8.5.2
 */
 
 class WC_Begateway_Erip {
@@ -30,7 +30,7 @@ class WC_Begateway_Erip {
     // add meta boxes
     add_action( 'add_meta_boxes', array( $this, 'add_meta_boxes' ), 10, 2 );
     // Add scripts and styles for admin
-		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
+	add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
 
     // Add Admin Backend Actions
     add_action( 'wp_ajax_begateway_cancel_bill', array(
