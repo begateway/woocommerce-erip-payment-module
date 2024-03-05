@@ -27,9 +27,9 @@ class WC_Gateway_Begateway_Erip extends WC_Payment_Gateway {
 	protected function setup_properties() {
     $this->id                 = 'begateway_erip';
 		$this->icon               = plugins_url( 'assets/images/erip.png' , dirname(__FILE__) );
-		$this->method_title       = __( "ЕРИП", 'woocommerce-begateway-erip' );
-		$this->method_description = __( "Приём ЕРИП платежей через агрегатора bePaid.by", 'woocommerce-begateway-erip' );
-    $this->has_fields         = false;
+		$this->method_title       = __( "ЕРИП", 'wc-begateway-erip-payment' );
+		$this->method_description = __( "Приём ЕРИП платежей через агрегатора bePaid.by", 'wc-begateway-erip-payment' );
+        $this->has_fields         = false;
 		$this->title              = $this->get_option( 'name_sposoba_oplati' );
 		$this->description        = wpautop( $this->get_option( 'description_sposoba_oplati') );
   }
@@ -233,7 +233,7 @@ class WC_Gateway_Begateway_Erip extends WC_Payment_Gateway {
       $order->update_meta_data( '_begateway_transaction_id', $response->transaction->uid );
   		return $response;
     } else {
-      return new WP_Error( '', __( 'Ошибка создания счёта в ЕРИП', 'woocommerce-begateway-erip' ) );
+      return new WP_Error( '', __( 'Ошибка создания счёта в ЕРИП', 'wc-begateway-erip-payment' ) );
     }
 	}
 
@@ -270,8 +270,8 @@ class WC_Gateway_Begateway_Erip extends WC_Payment_Gateway {
     curl_setopt( $ch, CURLOPT_FRESH_CONNECT, 1 );
     curl_setopt( $ch, CURLOPT_USERPWD, $this->get_option( 'erip_id_magazin' ).':'.$this->get_option( 'erip_API_key' ) );
 
-    $this->log( __( 'API запрос: ', 'woocommerce-begateway-erip' ) . $url . PHP_EOL . ' -- ' . __FILE__ . ' - Line:' . __LINE__ );
-    $this->log( __( 'Данные запроса: ', 'woocommerce-begateway-erip' ) . print_r( $arData, true) . PHP_EOL . ' -- ' . __FILE__ . ' - Line:' . __LINE__ );
+    $this->log( __( 'API запрос: ', 'wc-begateway-erip-payment' ) . $url . PHP_EOL . ' -- ' . __FILE__ . ' - Line:' . __LINE__ );
+    $this->log( __( 'Данные запроса: ', 'wc-begateway-erip-payment' ) . print_r( $arData, true) . PHP_EOL . ' -- ' . __FILE__ . ' - Line:' . __LINE__ );
 
     $response = curl_exec( $ch );
 
@@ -284,20 +284,20 @@ class WC_Gateway_Begateway_Erip extends WC_Payment_Gateway {
     curl_close($ch);
     $response = json_decode( $response );
 
-    $this->log( __( 'API ответ:', 'woocommerce-begateway-erip' ) . print_r( $response, true) . PHP_EOL . ' -- ' . __FILE__ . ' - Line:' . __LINE__ );
+    $this->log( __( 'API ответ:', 'wc-begateway-erip-payment' ) . print_r( $response, true) . PHP_EOL . ' -- ' . __FILE__ . ' - Line:' . __LINE__ );
 
     if ( is_null( $response ) || $response === false ) {
-      $this->log( __( 'Ошибка обработки JSON-ответа', 'woocommerce-begateway-erip' ) . PHP_EOL . ' -- ' . __FILE__ . ' - Line:' . __LINE__ );
+      $this->log( __( 'Ошибка обработки JSON-ответа', 'wc-begateway-erip-payment' ) . PHP_EOL . ' -- ' . __FILE__ . ' - Line:' . __LINE__ );
       return false;
     }
 
     if ( $method == 'DELETE' ) {
       if ( $response->message != 'Successfully deleted' ) {
-        $this->log( __( 'Ошибка удаления счёта в ЕРИП', 'woocommerce-begateway-erip' ) . PHP_EOL . ' -- ' . __FILE__ . ' - Line:' . __LINE__ );
+        $this->log( __( 'Ошибка удаления счёта в ЕРИП', 'wc-begateway-erip-payment' ) . PHP_EOL . ' -- ' . __FILE__ . ' - Line:' . __LINE__ );
         return false;
       }
     } elseif ( $response->transaction->status != 'pending' ) {
-      $this->log( __( 'Ошибка регистрации счёта в ЕРИП', 'woocommerce-begateway-erip' ) . PHP_EOL . ' -- ' . __FILE__ . ' - Line:' . __LINE__ );
+      $this->log( __( 'Ошибка регистрации счёта в ЕРИП', 'wc-begateway-erip-payment' ) . PHP_EOL . ' -- ' . __FILE__ . ' - Line:' . __LINE__ );
       return false;
     }
 
@@ -330,7 +330,7 @@ class WC_Gateway_Begateway_Erip extends WC_Payment_Gateway {
 
     $message = $mailer->wrap_message('', $message);
     $subject = sprintf(
-      __( 'Инструкция об оплате заказа № %s', 'woocommerce-begateway-erip' ),
+      __( 'Инструкция об оплате заказа № %s', 'wc-begateway-erip-payment' ),
       $order->get_order_number()
     );
 
@@ -421,11 +421,11 @@ class WC_Gateway_Begateway_Erip extends WC_Payment_Gateway {
     $uid = $order->get_meta( '_begateway_transaction_id', true );
 
     if ( ! isset( $uid ) || empty( $uid ) ) {
-      return new WP_Error( 'begateway_erip_error', __( 'Не найден номер операции, чтобы отменить ЕРИП счёт' , 'woocommerce-begateway-erip' ) );
+      return new WP_Error( 'begateway_erip_error', __( 'Не найден номер операции, чтобы отменить ЕРИП счёт' , 'wc-begateway-erip-payment' ) );
     }
 
     if ( $this->id != $order->get_payment_method() ) {
-			return new WP_Error( 'begateway_erip_error', __( 'Недействительный способ оплаты' , 'woocommerce-begateway-erip' ) );
+			return new WP_Error( 'begateway_erip_error', __( 'Недействительный способ оплаты' , 'wc-begateway-erip-payment' ) );
 		}
 
     $this->log( "Отменяем счёт {$uid} of {$order->get_id()}" . PHP_EOL . ' -- ' . __FILE__ . ' - Line:' . __LINE__ );
@@ -434,9 +434,9 @@ class WC_Gateway_Begateway_Erip extends WC_Payment_Gateway {
 
     if ( $response ) {
       $order->update_meta_data( '_begateway_transaction_id', null );
-      $order->update_status( 'on-hold', __( 'Заказ требует уточнения остатков и обратного звонка клиенту', 'woocommerce-begateway-erip' ) );
+      $order->update_status( 'on-hold', __( 'Заказ требует уточнения остатков и обратного звонка клиенту', 'wc-begateway-erip-payment' ) );
     } else {
-      return new WP_Error( 'begateway_erip_error', __( 'Ошибка удаления счёта в ЕРИП', 'woocommerce-begateway-erip' ) );
+      return new WP_Error( 'begateway_erip_error', __( 'Ошибка удаления счёта в ЕРИП', 'wc-begateway-erip-payment' ) );
     }
 		return $response;
   }
@@ -451,11 +451,11 @@ class WC_Gateway_Begateway_Erip extends WC_Payment_Gateway {
     $uid = $order->get_meta( '_begateway_transaction_id', true );
 
     if ( ! empty( $uid ) ) {
-      return new WP_Error( 'begateway_erip_error', __( 'Счёт в ЕРИП уже создан' , 'woocommerce-begateway-erip' ) );
+      return new WP_Error( 'begateway_erip_error', __( 'Счёт в ЕРИП уже создан' , 'wc-begateway-erip-payment' ) );
     }
 
     if ( $this->id != $order->get_payment_method() ) {
-			return new WP_Error( 'begateway_erip_error', __( 'Недействительный способ оплаты' , 'woocommerce-begateway-erip' ) );
+			return new WP_Error( 'begateway_erip_error', __( 'Недействительный способ оплаты' , 'wc-begateway-erip-payment' ) );
 		}
 
     $this->log( 'Автоматическое выставление счёта для заказа ' . $order->get_id() . PHP_EOL . ' -- ' . __FILE__ . ' - Line:' . __LINE__ );
@@ -473,7 +473,7 @@ class WC_Gateway_Begateway_Erip extends WC_Payment_Gateway {
       $this->_email_erip_instruction( $order );
 
       // Mark as pending
-      $order->update_status('pending', __( 'Ожидается оплата заказа', 'woocommerce-begateway-erip' ));
+      $order->update_status('pending', __( 'Ожидается оплата заказа', 'wc-begateway-erip-payment' ));
       // Reduce stock levels
       wc_reduce_stock_levels( $order );
     } else {
@@ -500,7 +500,7 @@ class WC_Gateway_Begateway_Erip extends WC_Payment_Gateway {
     $order->update_meta_data( '_begateway_erip_instruction', $this->_instruction );
 
     // Mark as on-hold
-    $order->update_status( 'on-hold', __( 'Заказ требует уточнения остатков и обратного звонка клиенту', 'woocommerce-begateway-erip' ) );
+    $order->update_status( 'on-hold', __( 'Заказ требует уточнения остатков и обратного звонка клиенту', 'wc-begateway-erip-payment' ) );
 
     // Reduce stock levels
     wc_reduce_stock_levels( $order );
