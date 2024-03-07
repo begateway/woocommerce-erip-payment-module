@@ -515,11 +515,6 @@ class WC_Gateway_Begateway_Erip extends WC_Payment_Gateway {
   * @throws Exception
   */
   public function get_invoice_data( $order ) {
-    // @TODO может удалить эту функцию?
-    if ( is_int( $order ) ) {
-      $order = wc_get_order( $order );
-    }
-
     if ( $order->get_payment_method() !== $this->id ) {
       throw new Exception('Unable to get invoice data.');
     }

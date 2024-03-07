@@ -5,11 +5,11 @@ ARG wc_version
 ARG NODE_MAJOR=16
 
 RUN apt-get clean && apt-get update
-RUN apt-get install -y --no-install-recommends unzip wget ca-certificates curl gnupg
+RUN apt-get install -y --no-install-recommends unzip wget ca-certificates curl gnupg less
 RUN mkdir -p /etc/apt/keyrings && \
     curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && \
     echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_${NODE_MAJOR}.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list && \
-    apt-get update && apt-get install nodejs -y && \
+    apt-get update && apt-get install nodejs npm -y && \
     curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && \
     chmod +x wp-cli.phar && \
     mv wp-cli.phar /usr/local/bin/wp && \

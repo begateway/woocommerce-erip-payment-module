@@ -15,7 +15,7 @@ Text Domain: wc-begateway-erip-payment
 Domain Path: /languages/
 
 WC requires at least: 3.2.0
-WC tested up to: 8.5.2
+WC tested up to: 8.6.1
 */
 
 use Automattic\WooCommerce\Internal\DataStores\Orders\CustomOrdersTableController;
@@ -44,13 +44,13 @@ class WC_Begateway_Erip
 
         
         // Add Admin Backend Actions
-        add_action('wp_ajax_begateway_cancel_bill', array(
+        add_action('wp_ajax_begateway_erip_cancel_bill', array(
             $this,
             'ajax_begateway_erip_cancel'
         )
         );
 
-        add_action('wp_ajax_begateway_create_bill', array(
+        add_action('wp_ajax_begateway_erip_create_bill', array(
             $this,
             'ajax_begateway_erip_create'
         )
@@ -143,7 +143,7 @@ class WC_Begateway_Erip
      * @param array $links
      * @return array
      */
-    function woocommerce_begateway_plugin_links($links)
+    function woocommerce_begateway_erip_plugin_links($links)
     {
 
         $settings_url = add_query_arg(
@@ -156,9 +156,9 @@ class WC_Begateway_Erip
         );
 
         $plugin_links = array(
-            '<a href="' . esc_url($settings_url) . '">' . esc_html__('Settings', 'wc-begateway-payment') . '</a>',
-            '<a href="https://wordpress.org/support/plugin/wc-begateway-erip-payment-payment/">' . esc_html__('Support', 'wc-begateway-erip-payment') . '</a>',
-            '<a href="https://wordpress.org/plugins/wc-begateway-erip-payment-payment/#description">' . esc_html__('Docs', 'wc-begateway-erip-payment') . '</a>',
+            '<a href="' . esc_url($settings_url) . '">' . esc_html__('Настройки', 'wc-begateway-erip-payment') . '</a>',
+            // '<a href="https://wordpress.org/support/plugin/wc-begateway-erip-payment-payment/">' . esc_html__('Support', 'wc-begateway-erip-payment') . '</a>',
+            // '<a href="https://wordpress.org/plugins/wc-begateway-erip-payment-payment/#description">' . esc_html__('Docs', 'wc-begateway-erip-payment') . '</a>',
         );
 
         return array_merge($plugin_links, $links);
@@ -199,19 +199,20 @@ class WC_Begateway_Erip
      * Add meta boxes in admin
      * @return void
      */
-    public function add_meta_boxes($screen, $post)
+    public function add_meta_boxes($screen, $order)
     {
+        
         $order = $order instanceof \WC_Order ? $order : wc_get_order($order->ID);
         if (!($order instanceof \WC_Order)) {
             return;
         }
-
+     
         if ($this->id !== $order->get_payment_method()) {
             return;
         }
 
-        $screen = WC_Gateway_BeGateway_Utils::get_edit_order_screen_id();
-        ;
+        $screen = WC_Gateway_BeGateway_Erip_Utils::get_edit_order_screen_id();
+        
         $post_types = apply_filters('woocommerce_begateway_erip_admin_meta_box_post_types', array($screen));
 
         foreach ($post_types as $post_type) {
@@ -307,7 +308,7 @@ class WC_Begateway_Erip
         $order = wc_get_order($order_id);
 
         if (!$order) {
-            wp_send_json_error(__('Не верный номер заказа'));
+            wp_send_json_error(__('Не верный номер заказа', 'wc-begateway-erip-payment'));
             die();
         }
 
@@ -320,21 +321,10 @@ class WC_Begateway_Erip
         $result = $gateway->cancel_bill($order);
 
         if (!is_wp_error($result)) {
-            wp_send_json_success(self::get_admin_notice_message('cancel'));
+            wp_send_json_success(__('Счёт в ЕРИП успешно отменён', 'wc-begateway-erip-payment'));
         } else {
             wp_send_json_error($result->get_error_message());
         }
-    }
-
-    public static function get_admin_notice_message($type)
-    {
-        $messages = [
-            'cancel' => __('Счёт в ЕРИП успешно отменён', 'wc-begateway-erip-payment'),
-            'create' => __('Счёт в ЕРИП успешно создан', 'wc-begateway-erip-payment')
-        ];
-
-        $result = (isset($messages[$type])) ? $messages[$type] : null;
-        return $result;
     }
 
     /**
@@ -351,7 +341,7 @@ class WC_Begateway_Erip
         $order = wc_get_order($order_id);
 
         if (!$order) {
-            wp_send_json_error(__('Не верный номер заказа'));
+            wp_send_json_error(__('Не верный номер заказа', 'wc-begateway-erip-payment'));
             die();
         }
 
@@ -364,7 +354,7 @@ class WC_Begateway_Erip
         $result = $gateway->create_bill($order);
 
         if (!is_wp_error($result)) {
-            wp_send_json_success(self::get_admin_notice_message('create'));
+            wp_send_json_success( __('Счёт в ЕРИП создан успешно', 'wc-begateway-erip-payment'));
         } else {
             wp_send_json_error($result->get_error_message());
         }
@@ -390,26 +380,36 @@ class WC_Begateway_Erip
         </div>
         <?php
     }
+
+        /**
+     * Plugin url.
+     *
+     * @return string
+     */
+    public static function plugin_url()
+    {
+        return untrailingslashit(plugins_url('/', __FILE__));
+    }
+
+    /**
+     * Plugin url.
+     *
+     * @return string
+     */
+    public static function plugin_abspath()
+    {
+        return trailingslashit(plugin_dir_path(__FILE__));
+    }
+
+    /**
+     * Plugin version.
+     *
+     * @return string
+     */
+    public static function plugin_version()
+    {
+        return self::_get_plugin_version();
+    }
 }
 
 new WC_Begateway_Erip();
-
-function admin_notice_erip_message()
-{
-    $plugin = isset($_GET['plugin']) ? $_GET['plugin'] : false;
-
-    if (!$plugin || $plugin != WC_Begateway_Erip::$module_id) {
-        return;
-    }
-
-    $message_type = isset($_GET['plugin_message']) ? $_GET['plugin_message'] : null;
-
-    $message = WC_Begateway_Erip::get_admin_notice_message($message_type);
-
-    if (!$message) {
-        return;
-    }
-
-    WC_Begateway_Erip::admin_notice($message, 'success');
-}
-add_action('admin_notices', 'admin_notice_erip_message');

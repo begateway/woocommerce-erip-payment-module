@@ -3,7 +3,7 @@
 Contributors: begateway
 Author URI: https://begateway.com
 Requires at least: 4.7
-Tested up to: 8.5.2
+Tested up to: 8.6.1
 Stable tag: 4.0.0
 Requires PHP: 7.0
 License: GPLv2 or later

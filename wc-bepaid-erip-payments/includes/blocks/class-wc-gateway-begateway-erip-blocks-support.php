@@ -40,14 +40,14 @@ final class WC_Begateway_Erip_Blocks_Support extends AbstractPaymentMethodType {
 	 */
 	public function get_payment_method_script_handles() {
 		$script_path       = '/assets/js/frontend/blocks.js';
-		$script_asset_path = WC_BeGateway::plugin_abspath() . 'assets/js/frontend/blocks.asset.php';
+		$script_asset_path = WC_BeGateway_Erip::plugin_abspath() . 'assets/js/frontend/blocks.asset.php';
 		$script_asset      = file_exists( $script_asset_path )
 			? require( $script_asset_path )
 			: array(
 				'dependencies' => array(),
-				'version'      => WC_BeGateway::plugin_version()
+				'version'      => WC_BeGateway_Erip::plugin_version()
 			);
-		$script_url        = WC_BeGateway::plugin_url() . $script_path;
+		$script_url        = WC_BeGateway_Erip::plugin_url() . $script_path;
 
 		wp_register_script(
 			'wc-begateway-erip-payment-payments-blocks',
@@ -58,7 +58,7 @@ final class WC_Begateway_Erip_Blocks_Support extends AbstractPaymentMethodType {
 		);
 
 		if ( function_exists( 'wp_set_script_translations' ) ) {
-			wp_set_script_translations( 'wc-begateway-erip-payment-payments-blocks', 'wc-begateway-erip-payment-payment', WC_BeGateway::plugin_abspath() . 'languages/' );
+			wp_set_script_translations( 'wc-begateway-erip-payment-payments-blocks', 'wc-begateway-erip-payment-payment', WC_BeGateway_Erip::plugin_abspath() . 'languages/' );
 		}
 
 		return [ 'wc-begateway-erip-payment-payments-blocks' ];
@@ -74,7 +74,7 @@ final class WC_Begateway_Erip_Blocks_Support extends AbstractPaymentMethodType {
 			'title'       => $this->get_setting( 'title' ),
 			'description' => $this->get_setting( 'description' ),
 			'supports'    => $this->get_supported_features(),
-			//'logo_url'    => WC_BeGateway::plugin_url() . '/assets/images/icon.png',
+			'logo_url'    => WC_BeGateway_Erip::plugin_url() . '/assets/images/icon.png',
 		];
 	}
 
