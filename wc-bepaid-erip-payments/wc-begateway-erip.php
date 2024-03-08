@@ -275,7 +275,7 @@ class WC_Begateway_Erip
     {
         wp_register_script(
             'begateway-erip-gateway-admin-js',
-            plugin_dir_url(__FILE__) . 'assets/js/admin.js',
+            plugin_dir_url(__FILE__) . 'resources/js/frontend/admin.js',
             array(
                 'jquery'
             )
@@ -308,7 +308,7 @@ class WC_Begateway_Erip
         $order = wc_get_order($order_id);
 
         if (!$order) {
-            wp_send_json_error(__('Не верный номер заказа', 'wc-begateway-erip-payment'));
+            wp_send_json_error(__('Неверный номер заказа', 'wc-begateway-erip-payment'));
             die();
         }
 
@@ -341,7 +341,7 @@ class WC_Begateway_Erip
         $order = wc_get_order($order_id);
 
         if (!$order) {
-            wp_send_json_error(__('Не верный номер заказа', 'wc-begateway-erip-payment'));
+            wp_send_json_error(__('Неверный номер заказа', 'wc-begateway-erip-payment'));
             die();
         }
 

@@ -2,9 +2,9 @@
 import { sprintf, __ } from '@wordpress/i18n';
 import { registerPaymentMethod } from '@woocommerce/blocks-registry';
 import { decodeEntities } from '@wordpress/html-entities';
-import { getSetting } from '@woocommerce/settings';
+import { getSetting, WC_ASSET_URL } from '@woocommerce/settings';
 
-const settings = getSetting( 'begateway_data', {} );
+const settings = getSetting( 'begateway_erip_data', {} );
 
 const defaultLabel = __(
 	'beGateway ERIP Payments',
@@ -18,22 +18,18 @@ const label = decodeEntities( settings.title ) || defaultLabel;
 const Content = () => {
 	return decodeEntities( settings.description || '' );
 };
-/**
- * Label component
- *
- * @param {*} props Props from payment API.
- */
-const Label = ( props ) => {
-	const { PaymentMethodLabel } = props.components;
-	return <PaymentMethodLabel text={ label } />;
-};
 
 /**
  * Dummy payment method config object.
  */
 const BeGatewayErip = {
 	name: "begateway_erip",
-	label: <Label />,
+	label: (
+        <img
+			src={ decodeEntities( settings.logo_url ) }
+            alt={ label }
+        />
+    ),
 	content: <Content />,
 	edit: <Content />,
 	canMakePayment: () => true,

@@ -71,10 +71,10 @@ final class WC_Begateway_Erip_Blocks_Support extends AbstractPaymentMethodType {
 	 */
 	public function get_payment_method_data() {
 		return [
-			'title'       => $this->get_setting( 'title' ),
-			'description' => $this->get_setting( 'description' ),
+			'title'       => $this->get_setting( 'name_sposoba_oplati' ),
+			'description' => $this->get_setting( 'description_sposoba_oplati' ),
 			'supports'    => $this->get_supported_features(),
-			'logo_url'    => WC_BeGateway_Erip::plugin_url() . '/assets/images/icon.png',
+			'logo_url'    => WC_BeGateway_Erip::plugin_url() . '/assets/images/erip.png',
 		];
 	}
 
