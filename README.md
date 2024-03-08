@@ -5,7 +5,7 @@
 ## Установка
 
   - Создайте резервную копию вашего магазина и базы данных
-  - Загрузите архив модуля [woocommerce-erip-payments.zip](https://github.com/beGateway/woocommerce-erip-payment-module/raw/master/woocommerce-erip-payments.zip)
+  - Скачайте со страницы [Github релизов](https://github.com/begateway/woocommerce-erip-payment-module/releases) архив расширения `wc-bepaid-erip-payments.zip` 
   - Зайдите в панель администратора Wordpress (www.yoursite.com/wp-admin/)
   - Выберите __Плагины -> Добавить новый__
   - Нажмите __Загрузить плагин__

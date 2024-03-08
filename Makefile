@@ -1,3 +1,3 @@
 all:
-	if [[ -e woocommerce-erip-payments.zip ]]; then rm woocommerce-erip-payments.zip; fi
-	zip -r woocommerce-erip-payments.zip woocommerce-erip-payments -x */test/* -x */examples/* -x *.DS_Store*
+	if [[ -e wc-bepaid-erip-payments.zip ]]; then rm wc-bepaid-erip-payments.zip; fi
+	zip -r wc-bepaid-erip-payments.zip wc-bepaid-erip-payments -x */test/* -x */examples/* -x *.DS_Store* -x *node_modules*
