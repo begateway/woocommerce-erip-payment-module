@@ -490,7 +490,7 @@ class WC_Gateway_Begateway_Erip extends WC_Payment_Gateway {
    * @return null
 	 */
   public function create_bill_manual( $order ) {
-    $this->log( 'Ручное выставление счёта для заказа ' . $order_id . PHP_EOL . ' -- ' . __FILE__ . ' - Line:' . __LINE__ );
+    $this->log( 'Ручное выставление счёта для заказа ' . $order->get_id() . PHP_EOL . ' -- ' . __FILE__ . ' - Line:' . __LINE__ );
 
     //Оплата будет происходить в ручном режиме
     $this->_instruction = $this->get_option( 'description_configuration_manual_mode' );
