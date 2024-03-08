@@ -15,7 +15,7 @@ jobs:
       with:
         type: 'zip'
         filename: 'wc-bepaid-erip-payments.zip'
-        exclusions: '*.git* docker* doc* Dockerfile LICENSE* Makefile DEVELOPMENT* composer* README* *.zip /*docker/*'
+        exclusions: '*.git* docker* /doc* Dockerfile LICENSE* Makefile DEVELOPMENT* composer* README* *.zip /*docker/*'
 
     - name: Upload Release
       uses: ncipollo/release-action@v1.12.0
