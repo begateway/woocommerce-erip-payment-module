@@ -1,0 +1,332 @@
+# Copyright (C) 2024 bePaid
+# This file is distributed under the same license as the WooCommerce ЕРИП платежи plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: WooCommerce ЕРИП платежи 4.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wc-begateway-erip-payment/\n"
+"Last-Translator: admin@ecomcharge.com\n"
+"Language-Team: admin@ecomcharge.com\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2024-03-08T10:00:00+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.10.0\n"
+"X-Domain: wc-begateway-erip-payment\n"
+
+#. Plugin Name of the plugin
+#: wc-begateway-erip.php
+msgid "WooCommerce ЕРИП платежи"
+msgstr ""
+
+#. Plugin URI of the plugin
+#: wc-begateway-erip.php
+msgid "https://github.com/begateway/woocommerce-erip-payment-module"
+msgstr ""
+
+#. Description of the plugin
+#: wc-begateway-erip.php
+msgid "Модуль приёма ЕРИП платежей через агрегатора bePaid.by"
+msgstr ""
+
+#. Author of the plugin
+#: wc-begateway-erip.php
+msgid "bePaid"
+msgstr ""
+
+#: includes/class-wc-gateway-begateway-erip.php:30
+msgid "ЕРИП"
+msgstr ""
+
+#: includes/class-wc-gateway-begateway-erip.php:31
+msgid "Приём ЕРИП платежей через агрегатора bePaid.by"
+msgstr ""
+
+#: includes/class-wc-gateway-begateway-erip.php:236
+msgid "Ошибка создания счёта в ЕРИП"
+msgstr ""
+
+#: includes/class-wc-gateway-begateway-erip.php:273
+msgid "API запрос: "
+msgstr ""
+
+#: includes/class-wc-gateway-begateway-erip.php:274
+msgid "Данные запроса: "
+msgstr ""
+
+#: includes/class-wc-gateway-begateway-erip.php:287
+msgid "API ответ:"
+msgstr ""
+
+#: includes/class-wc-gateway-begateway-erip.php:290
+msgid "Ошибка обработки JSON-ответа"
+msgstr ""
+
+#: includes/class-wc-gateway-begateway-erip.php:296
+#: includes/class-wc-gateway-begateway-erip.php:439
+msgid "Ошибка удаления счёта в ЕРИП"
+msgstr ""
+
+#: includes/class-wc-gateway-begateway-erip.php:300
+msgid "Ошибка регистрации счёта в ЕРИП"
+msgstr ""
+
+#: includes/class-wc-gateway-begateway-erip.php:333
+msgid "Инструкция об оплате заказа № %s"
+msgstr ""
+
+#: includes/class-wc-gateway-begateway-erip.php:424
+msgid "Не найден номер операции, чтобы отменить ЕРИП счёт"
+msgstr ""
+
+#: includes/class-wc-gateway-begateway-erip.php:428
+#: includes/class-wc-gateway-begateway-erip.php:458
+msgid "Недействительный способ оплаты"
+msgstr ""
+
+#: includes/class-wc-gateway-begateway-erip.php:437
+#: includes/class-wc-gateway-begateway-erip.php:503
+msgid "Заказ требует уточнения остатков и обратного звонка клиенту"
+msgstr ""
+
+#: includes/class-wc-gateway-begateway-erip.php:454
+msgid "Счёт в ЕРИП уже создан"
+msgstr ""
+
+#: includes/class-wc-gateway-begateway-erip.php:476
+msgid "Ожидается оплата заказа"
+msgstr ""
+
+#: includes/settings.php:9
+#: includes/settings.php:48
+msgid "Оплата через ЕРИП"
+msgstr ""
+
+#: includes/settings.php:10
+msgid "Разрешить"
+msgstr ""
+
+#: includes/settings.php:16
+msgid "ID магазина"
+msgstr ""
+
+#: includes/settings.php:18
+msgid "Введите ID магазина в системе bePaid"
+msgstr ""
+
+#: includes/settings.php:23
+msgid "Секретный ключ магазина"
+msgstr ""
+
+#: includes/settings.php:25
+msgid "Введите секретный ключ вашего магазина в системе bePaid"
+msgstr ""
+
+#: includes/settings.php:30
+msgid "Код услуги в системе ЕРИП"
+msgstr ""
+
+#: includes/settings.php:32
+msgid "Введите код услуги в системе ЕРИП, присвоенный bePaid"
+msgstr ""
+
+#: includes/settings.php:37
+msgid "Сообщение в чеке после оплаты"
+msgstr ""
+
+#: includes/settings.php:39
+msgid "Введите сообщение, которой будет выводиться в чеке после оплаты заказа"
+msgstr ""
+
+#: includes/settings.php:40
+msgid "Спасибо за оплату"
+msgstr ""
+
+#: includes/settings.php:41
+msgid "Текст может содержать метки: {{fio}} - имя и фамилия покупателя, {{order_number}} - номер заказа, {{name_shop}} - имя вашего магазина."
+msgstr ""
+
+#: includes/settings.php:45
+msgid "Название способа оплаты"
+msgstr ""
+
+#: includes/settings.php:47
+msgid "Введите название способа оплаты, который будет отображаться у пользователя в списке вариантов оплаты"
+msgstr ""
+
+#: includes/settings.php:52
+msgid "Описание способа оплаты для покупателя"
+msgstr ""
+
+#: includes/settings.php:54
+msgid "Введите описание способа оплаты для пользователя"
+msgstr ""
+
+#: includes/settings.php:55
+msgid "ЕРИП позволяет произвести оплату в любом удобном для Вас месте, в удобное для Вас время, в удобном для Вас пункте банковского обслуживания – банкомате, инфокиоске, интернет-банке, кассе банков, с помощью мобильного банкинга и т.д. Вы можете осуществить платеж с использованием наличных денежных средств, электронных денег и банковских платежных карточек в пунктах банковского обслуживания банков, которые оказывают услуги по приему платежей, а также посредством инструментов дистанционного банковского обслуживания."
+msgstr ""
+
+#: includes/settings.php:60
+msgid "Текст-подтверждение заказа для ручного режима"
+msgstr ""
+
+#: includes/settings.php:62
+msgid "Введите текст-подтверждение заказа для ручного режима. Текст будет показан на странице завершения оплаты заказа."
+msgstr ""
+
+#: includes/settings.php:63
+msgid "Наш менеджер свяжется с вами для уточнения заказа и сообщит номер заказа и инструкции как его оплатить в системе ЕРИП."
+msgstr ""
+
+#: includes/settings.php:68
+msgid "Текст-подтверждение заказа для автоматического режима"
+msgstr ""
+
+#: includes/settings.php:70
+msgid "Введите текст-подтверждение заказа для автоматического режима. Текст будет показан на странице завершения оплаты заказа."
+msgstr ""
+
+#: includes/settings.php:71
+msgid ""
+"Если вы осуществляете платеж в кассе банка, пожалуйста, сообщите кассиру о необходимости проведения платежа через ЕРИП.\n"
+"\n"
+"Для проведения платежа необходимо найти магазин в дереве ЕРИП по коду услуги {{erip_service_code}} или воспользоваться инструкцией:\n"
+"\n"
+"1.​ Выбрать пункт ЕРИП\n"
+"2.​ Выбрать последовательно пункты: {{instruction_erip}}\n"
+"3.​ Ввести номер заказа {{order_number}}\n"
+"4.​ Проверить корректность информации\n"
+"5.​ Совершить платеж.\n"
+"\n"
+"Если вы пользуетесь мобильным приложением банка, то используйте его, чтобы отсканировать QR-код и осуществить платеж.\n"
+"\n"
+"{{qr_code}}\n"
+"\n"
+"Обратите внимание: если вы откажетесь от покупки, для возврата денег вам придется обратиться в магазин.\n"
+""
+msgstr ""
+
+#: includes/settings.php:88
+msgid "Текст может содержать метки: {{fio}} - имя и фамилия покупателя, {{order_number}} - номер заказа, {{name_shop}} - имя вашего магазина, {{instruction_erip}} - инструкция по оплате через ЕРИП."
+msgstr ""
+
+#: includes/settings.php:92
+msgid "Текст для e-mail сообщения с инструкцией об оплате"
+msgstr ""
+
+#: includes/settings.php:94
+msgid "Введите текст сообщения, которое ваш покупатель получит после создания заказа"
+msgstr ""
+
+#: includes/settings.php:95
+msgid ""
+"Здравствуйте, {{fio}}!\n"
+"\n"
+"В этом письме содержится инструкция как оплатить заказ {{order_number}} в магазине {{name_shop}} через систему ЕРИП.\n"
+"\n"
+"Если вы осуществляете платеж в кассе банка, пожалуйста, сообщите кассиру о необходимости проведения платежа через ЕРИП.\n"
+"\n"
+"Для проведения платежа необходимо найти магазин в дереве ЕРИП по коду услуги {{erip_service_code}} или воспользоваться инструкцией:\n"
+"\n"
+"1.​ Выбрать пункт ЕРИП\n"
+"2.​ Выбрать последовательно пункты: {{instruction_erip}}\n"
+"3.​ Ввести номер заказа {{order_number}}\n"
+"4.​ Проверить корректность информации\n"
+"5.​ Совершить платеж.\n"
+"\n"
+"Если вы пользуетесь мобильным приложением банка, то используйте его, чтобы отсканировать QR-код и осуществить платеж.\n"
+"\n"
+"{{qr_code}}\n"
+"\n"
+"Обратите внимание: если вы откажетесь от покупки, для возврата денег вам придется обратиться в магазин.\n"
+""
+msgstr ""
+
+#: includes/settings.php:116
+msgid "Текст может содержать метки: {{fio}} - имя и фамилия покупателя, {{order_number}} - номер заказа, {{name_shop}} - имя вашего магазина, {{instruction_erip}} - инструкция по оплате через ЕРИП, {{qr_code}} - QR-код для оплаты через мобильное приложение банка."
+msgstr ""
+
+#: includes/settings.php:120
+msgid "Оплата действительна (минут)"
+msgstr ""
+
+#: includes/settings.php:122
+msgid "Укажите количество минут, в течение которых заказ должен быть оплачен"
+msgstr ""
+
+#: includes/settings.php:127
+msgid "Создание счёта в ЕРИП"
+msgstr ""
+
+#: includes/settings.php:128
+msgid "Выберите тип создания счёта для пользователя"
+msgstr ""
+
+#: includes/settings.php:134
+msgid "Автоматическое создание счёта"
+msgstr ""
+
+#: includes/settings.php:135
+msgid "Ручное создание счёта"
+msgstr ""
+
+#: includes/settings.php:140
+msgid "Журнал отладки"
+msgstr ""
+
+#: includes/settings.php:142
+msgid "Включить журнал отладки"
+msgstr ""
+
+#: includes/settings.php:144
+msgid "Записывать события"
+msgstr ""
+
+#: templates/admin/metabox-order.php:15
+msgid "Заказ отменен"
+msgstr ""
+
+#: templates/admin/metabox-order.php:23
+msgid "Номер операции"
+msgstr ""
+
+#: templates/admin/metabox-order.php:34
+msgid "Вы отменяете выставленный счёт в ЕРИП"
+msgstr ""
+
+#: templates/admin/metabox-order.php:35
+msgid "Отменить счёт в ЕРИП"
+msgstr ""
+
+#: templates/admin/metabox-order.php:44
+msgid "Вы создаете счёт в ЕРИП"
+msgstr ""
+
+#: templates/admin/metabox-order.php:45
+msgid "Создать счёт в ЕРИП"
+msgstr ""
+
+#: wc-begateway-erip.php:159
+msgid "Настройки"
+msgstr ""
+
+#: wc-begateway-erip.php:221
+msgid "ЕРИП действия"
+msgstr ""
+
+#: wc-begateway-erip.php:288
+msgid "Обрабатываем запрос..."
+msgstr ""
+
+#: wc-begateway-erip.php:311
+#: wc-begateway-erip.php:344
+msgid "Неверный номер заказа"
+msgstr ""
+
+#: wc-begateway-erip.php:324
+msgid "Счёт в ЕРИП успешно отменён"
+msgstr ""
+
+#: wc-begateway-erip.php:357
+msgid "Счёт в ЕРИП создан успешно"
+msgstr ""

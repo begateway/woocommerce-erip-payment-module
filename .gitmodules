@@ -1,3 +1,0 @@
-[submodule "woocommerce-erip-payments/includes/begateway-api-php"]
-	path = woocommerce-erip-payments/includes/begateway-api-php
-	url = https://github.com/begateway/begateway-api-php.git

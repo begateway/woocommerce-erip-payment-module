@@ -1,0 +1,25 @@
+{
+    "name": "begateway/wc-bepaid-erip-payments",
+    "description": "BePaid ERIP Payment Gateway for WooCommerce",
+    "keywords": [
+        "bepaid",
+        "begateway",
+        "payment processing",
+        "api",
+        "erip",
+        "ерип"
+    ],
+    "config": {
+        "vendor-dir": "./wc-bepaid-erip-payments/includes/vendor"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "BePaid",
+            "email": "admin@bepaid.by"
+        }
+    ],
+    "require": {
+        "begateway/begateway-api-php": ">=5.1.0"
+    }
+}

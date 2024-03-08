@@ -5,21 +5,25 @@ services:
     build: &build
       context: .
       args:
-        version: "5.4.2"
-        wc_version: "4.3.1"
+        version: "6.4.3"
+        wc_version: "8.5.2"
+    user: "33:33"
     ports:
       - 80:80
     depends_on:
       - mysql
     volumes:
       - /var/www/html
-      - ./woocommerce-erip-payments:/var/www/html/wp-content/plugins/woocommerce-erip-payments
+      - ./wc-bepaid-erip-payments:/var/www/html/wp-content/plugins/wc-bepaid-erip-payments
       - ./docker/src/languages:/var/www/html/wp-content/languages
     networks:
       - default
     environment:
+      WORDPRESS_DB_NAME: wordpress
       WORDPRESS_DB_PASSWORD: root
-      WORDPRESS_DB_HOST: mysql
+      WORDPRESS_DB_HOST: mysql:3306
+      WORDPRESS_DB_USER: root
+      NODE_OPTIONS: "--openssl-legacy-provider"
 
   mysql:
     image: mysql:5.6
@@ -28,4 +32,5 @@ services:
     volumes:
       - /var/lib/mysql
     environment:
+      MYSQL_DATABASE: wordpress
       MYSQL_ROOT_PASSWORD: root
