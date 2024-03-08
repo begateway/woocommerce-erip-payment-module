@@ -9,7 +9,7 @@
   - Зайдите в панель администратора Wordpress (www.yoursite.com/wp-admin/)
   - Выберите __Плагины -> Добавить новый__
   - Нажмите __Загрузить плагин__
-  - Выберите архив плагина _woocommerce-erip-payments.zip_ и установите
+  - Выберите архив плагина _wc-bepaid-erip-payments.zip_ и установите
   - Выберите __Плагины -> Установленные__ и найдите _WooCommerce ЕРИП платежи_ плагин и активируйте его.
 
 ![Добавить новый плагин](https://github.com/beGateway/woocommerce-erip-payment-module/raw/master/doc/01_7.jpg)
